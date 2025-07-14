@@ -1,0 +1,15 @@
+delimiter $ ( [ { ~ $ $ } ] ) $;
+
+strict provable sort wff;
+pure sort set;
+
+term imp (A B: wff): wff; infixr imp: $\imp$ prec 20;
+term neg (A: wff): wff; prefix neg: $\neg$ prec 50;
+def or (A B: wff): wff = $\neg A \imp B$ ; infixr or: $\or$ prec 30;
+def and (A B: wff): wff = $\neg (A \imp \neg B)$; infixr and: $\and$ prec 30;
+def iff (A B: wff): wff = $(A \imp B) \and (B \imp A)$; infixr and: $\iff$ prec 10;
+
+axiom i20250502210003CST (A B: wff): $A$ > $A \imp B$ > $B$;
+axiom i20250502203828CST (A B: wff): $A \imp (B \imp A)$;
+axiom i20250502203830CST (A B C: wff): $(A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))$;
+axiom i20250502203832CST (A B: wff): $(\neg A \imp \neg B) \imp (B \imp A)$; 
