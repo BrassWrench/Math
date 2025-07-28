@@ -134,10 +134,9 @@ do {
   (def (eqd-for . e) (apply lookup eqd-map e))
   (def (register-eqd df) (fn tgt (insert! eqd-map df tgt)))
   (def (get-tgt-args args df . s) @ match args
-    [() (apply atom-app df s)]
+    [() (apply atom-app df s)] 
     [((? atom? t)) (apply atom-app t s)]
     [('quote (? atom? t)) t])
-
   (def (maybe-atom-map hs)
     @ if (apply and @ map (fn (x) (atom? (hd x))) hs)
       (let ([m (get! @ apply atom-map! hs)])

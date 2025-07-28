@@ -1,9 +1,9 @@
 import "D:/BaiduSyncdisk/Math/Metamathematics/base.mm1";
 
---演绎定理
+--|\imp消除
 theorem i20250325215058CST (A B: wff)(h1: $A$)(h2: $A \imp B$): $B$ = '(i20250502210003CST h1 h2);
 
---同一律
+--|同一律
 theorem i20250326092728CST (A: wff): $A \imp A$ = (focus 
 (have 's1 $(A \imp ((A \imp A) \imp A)) \imp ((A \imp (A \imp A)) \imp (A \imp A))$ '(i20250502203830CST))
 (have 's2 $A \imp ((A \imp A) \imp A)$ '(i20250502203828CST))
@@ -11,3 +11,5 @@ theorem i20250326092728CST (A: wff): $A \imp A$ = (focus
 (have 's4 $A \imp (A \imp A)$ '(i20250502203828CST))
 (have 's5 $A \imp A$ '(i20250325215058CST s4 s3))'(s5));
 
+do{
+};
