@@ -1,0 +1,113 @@
+--基本tactic--
+do{
+    --|恒等函数(id x)：返回x。
+    (def (id x) x)
+    --|忽略函数(ignore x_1 x_2 ... x_n)：接受任意参数且不做任何处理，返回#undef。
+    (def (ignore . _))
+    --|调试打印函数(dbg x)或(dbg x y)：若调用形式为(dbg x)，则打印x并返回x；若调用形式为(dbg x y)，则打印x: y并返回y。
+    (def dbg @ match-fn* [(x) (print x) x]
+    [(x y) (display @ string-append (->string x) ": " (->string y)) y])
+    --|左折叠函数(foldl l z s)：l是列表，z是项，(s x y)是一个接收两个参数的函数。返回(s (··· (s (s z l1) l2)···) ln)。
+    (def (foldl l z s) (if (null? l) z (foldl (tl l) (s z (hd l)) s)))
+    --|右折叠函数(foldr l z s)：l是列表，z是项，(s x y)是一个接收两个参数的函数。返回(s l1 (s l2 (··· (s ln z)···)))。
+    (def (foldr l z s) (if (null? l) z (s (hd l) (foldr (tl l) z s))))
+    --|区间函数(range a b)：a,b是自然数。返回一个(a a+1 a+2 ··· b-1)的列表。
+    (def (range a b) (if {a = b} () (cons a (range {a + 1} b))))
+    --|for循环函数(for a b f)：a,b是自然数，(f x)是一个接受一个自然数为参数的函数。执行(f a),(f a+1),(f a+2),···,(f b-1)并返回#undef。
+    (def (for a b f) (if {a = b} #undef (begin (f a) (for {a + 1} b f))))
+    --|末位函数(last l)：l是一个列表，返回列表l中的最后一个项。
+    (def last (match-fn [(a) a] [(_ . l) (last l)]))
+    --|末位分离函数(split-last l)：l是一个列表，将列表l中的最后一个项移至最前端并返回。
+    (def split-last @ match-fn
+    [(and (_) l) l]
+    [(a . l) @ match (split-last l) @ (r . l2) '(,r ,a . ,l2)]
+    [() ()])
+    --|连接函数(append . ls)：接受任意数量的列表参数，将这些列表连接起来并返回。
+    (def (append . ls) @ foldr ls () @ fn (l l2) @ foldr l l2 cons)
+    --|倒置函数(rev l)：l是一个列表，返回l的倒置（将l的左右反过来）。
+    (def (rev l) @ foldl l () (fn (l a) (cons a l)))
+    --|长度函数(len l)：l是一个列表，返回l的长度（项的个数）。
+    (def (len l) @ foldl l 0 (fn (n _) {n + 1}))
+    --|过滤函数(filter l p)：l是一个列表，(p x)是一个有一个参数的函数。将l中的项作为p的参数执行，筛选出返回值为#t的项并打包成列表返回。
+    (def (filter l p) @ foldl l () @ fn (l2 x) @ if (p x) (cons x l2) l2)
+    (def (repeat a n) (if {n = 0} () (cons a (repeat a {n - 1}))))
+    (def (iterate n f a) (if {n = 0} a (f (iterate {n - 1} f a))))
+    (def (find l) @ match l
+    [((k v) . l) (def f (find l)) @ fn (a) @ if {k == a} v (f a)]
+    [() @ fn (a)])
+    (def (verb e) (copy-span e (list ':verb e)))
+    (def (exact e) (refine (verb e)))
+    (def (result) (hd (get-goals)))
+    (def (target) (goal-type (result)))
+    (def (inspect-result f) (def g (result)) (refine (f)) (display @ pp g))
+    (def (later) @ match (get-goals)
+    [(g . gs) (apply set-goals @ append gs @ list g)])
+    (def mvar-sort @ match-fn @ (mvar s _) s)
+    (def (report a) (def g (result)) (refine a) (print g))
+    (def (atom-map . xs) (get! @ apply atom-map! xs))
+    (def (lookup-fn xs) (def m (apply atom-map xs)) (fn k (apply lookup m k)))
+    (def (atom-app . xs) (string->atom (apply string-append (map ->string xs))))
+    (def transpose @ match-fn*
+    [(xs) (apply map list xs)]
+    [(n xs) (if (null? xs) (repeat () n) (apply map list xs))])
+    (def (join xs) (apply append xs))
+    (def (rmap . args) (apply map (split-last args)))
+    (def (scan . args) (apply rmap args) #undef)
+    (def (undef? x) (not (def? x)))
+    (def (error-at sp msg) (report-at 'error sp msg))
+    (def (info-at sp msg) (report-at 'info sp msg))
+    (def goal! @ match-fn*
+    [(ty) (ref! (goal ty))]
+    [(pos ty) (ref! (copy-span pos (goal ty)))])
+    (def (swap) @ match (get-goals) [(x . y) (apply set-goals @ append y @ list x)])
+    (def suffices @ match-fn*
+    [(h) (have h _) (swap)]
+    [xs (apply have xs) (swap)])
+    (def (get-proof x) @ match (get-decl x)
+    [('theorem _ _ _ _ _ pf) (hd @ tl @ pf)]
+    [_ (error "not a theorem")])
+    (def (pp-proof x) (display @ pp @ get-proof x))
+
+    --| This utility will take a verbatim proof and "unelaborate" it into a refine script
+    --| using ! on every step. This is useful to get `refine` to re-typecheck a term when
+    --| testing tactics which produce verbatim proofs.
+    (def unelab @ letrec (
+    [(args bs xs)
+        @ if (null? bs) (map rec xs)
+        @ cons (hd xs) @ args (tl bs) (tl xs)]
+    [rec @ match-fn
+        [(':conv tgt _ p) '{,(rec p) : ,tgt}]
+        [(f . xs)
+        (cons '! f @ args (nth 2 @ get-decl f) xs)]
+        [e e]])
+    rec)
+
+    --| This is a special variable used by `mm0-rs doc` to shorten axiom list printouts.
+    --| It is an atom map from a name for the axiom list to a list of axioms.
+    (def axiom-sets (atom-map!))
+    --| Declare a new axiom set, which is used by the docgen tool to shorten axiom lists.
+    (def (add-axiom-set! x doc xs) (insert! axiom-sets x (cons doc xs)))
+
+    --| `(named pf)` wraps a proof script `pf`, runs it, then gathers all
+    --| unassigned metavariables and assigns them to dummies.
+    --| `(named x1 ... xn pf)` is the same but names the first `n` variables `x1,...,xn`.
+    --| This is commonly used for proofs where we don't care to name the
+    --| dummy variables.
+    (def named
+    (def (assign-mvar m x) @ match x ['_] [_ (set! m (dummy! x (mvar-sort m)))])
+    @ match-fn*
+        [((? atom? d) es) (refine es) (scan (get-mvars) (list d) assign-mvar)]
+        [(ds es) (refine es) (scan (get-mvars) ds assign-mvar)]
+        [(es) (refine es)
+        (def n (ref! 1))
+        (scan (get-mvars) @ fn (v)
+            (assign-mvar v (atom-app "a" n)) (set! n {n + 1}))
+        (if {n = 1} (display "unnecessary (named)"))])
+
+    --| `(name-all x1 ... xn)` instantiates all metavariables in the current
+    --| proof state. It is the same as `named` but it can be used in the middle of a
+    --| proof instead of as a wrapper around a complete proof.
+    (def (name-all . ds)
+    (def (assign-mvar m x) @ match x ['_] [_ (set! m (dummy! x (mvar-sort m)))])
+    (scan (get-mvars) ds assign-mvar))
+};

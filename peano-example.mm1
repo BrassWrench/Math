@@ -464,6 +464,7 @@ theorem dne: $ ~~a -> a $ = '(syl contra absurd);
 theorem inot: $ (a -> ~a) -> ~a $ = '(syl contra (imim1 dne));
 theorem con2: $ (a -> ~b) -> (b -> ~a) $ = '(a3d (syl5 dne id));
 theorem notnot1: $ a -> ~~a $ = '(con2 id);
+
 theorem con3: $ (a -> b) -> (~b -> ~a) $ = '(syl con2 (imim2i notnot1));
 theorem con1: $ (~a -> b) -> (~b -> a) $ = '(a3d (imim2i notnot1));
 theorem cases (h1: $ a -> b $) (h2: $ ~a -> b $): $ b $ = '(contra @ syl h1 @ con1 h2);
