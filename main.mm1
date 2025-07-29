@@ -1,2 +1,1 @@
-import "D:/BaiduSyncdisk/Math/Metamathematics/base.mm1";
-import "D:/BaiduSyncdisk/Math/Metamathematics/logic.mm1";
+import "D:/BaiduSyncdisk/Math/Metamathematics/_main.mm1";

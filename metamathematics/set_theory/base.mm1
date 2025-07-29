@@ -1,0 +1,109 @@
+--|分隔符
+delimiter $ ( [ { $ $ } ] ) $;
+
+--|公式
+strict provable sort wff;
+--|集合
+pure sort set;
+
+--基本联结词定义--
+--|否定联结词¬
+term TM20250728022034CST (A: wff): wff;
+prefix TM20250728022034CST: $\neg$ prec 50;
+--|蕴涵联结词→
+term TM20250728121849CST (A B: wff): wff;
+infixr TM20250728121849CST: $\imp$ prec 20;
+--|析取联结词∨
+def DF20250728122149CST (A B: wff): wff = $ \neg A \imp B $ ;
+infixr DF20250728122149CST: $\or$ prec 30;
+--|合取联结词∧
+def DF20250728122238CST (A B: wff): wff = $ \neg (A \imp \neg B) $;
+infixr DF20250728122238CST: $\and$ prec 30;
+--|等价联结词↔
+def DF20250728122328CST (A B: wff): wff = $ (A \imp B) \and (B \imp A) $;
+infixr DF20250728122328CST: $\iff$ prec 10;
+
+--基本谓词定义--
+--|属于谓词∈
+term TM20250728140338CST (x y: set): wff;
+infixr TM20250728140338CST: $\in$ prec 60;
+--|等于谓词=
+term TM20250728141917CST (x y: set): wff;
+infixr TM20250728141917CST: $\eq$ prec 60;
+--|包括谓词∋
+def DF20250728183641CST (x y: set): wff = $ y \in x $;
+infixr DF20250728183641CST: $\cov$ prec 60;
+--|不属于谓词/∈
+def DF20250728181633CST (x y: set): wff = $ \neg (x \in y) $;
+infixr DF20250728181633CST: $\nin$ prec 60;
+--|不等于谓词/=
+def DF20250728182213CST (x y: set): wff = $ \neg (x \eq y) $;
+infixr DF20250728182213CST: $\neq$ prec 60;
+--|不包括谓词/∋
+def DF20250728183932CST (x y: set): wff = $ \neg (y \in x) $;
+infixr DF20250728183932CST: $\ncov$ prec 60;
+
+--基本量词定义--
+--|全称量词∀
+term TM20250728135829CST {x: set} (P: wff x): wff;
+prefix TM20250728135829CST: $\fo$ prec 50;
+--|特称量词∃
+def DF20250728140151CST {x: set} (P: wff x): wff = $ \neg \fo x \neg P $;
+prefix DF20250728140151CST: $\ex$ prec 50;
+--|否定特称量词∄
+def DF20250728160116CST {x: set} (P: wff x): wff = $ \neg \ex x P $;
+prefix DF20250728160116CST: $\nex$ prec 50;
+--|存在唯一量词∃!
+def DF20250728144022CST {x: set} (P: wff x): wff = $ \ex y \fo x (P \iff (x \eq y)) $;
+
+--特殊定义--
+--|真值⊤
+def DF20250728151322CST: wff = $ \fo x (x \eq x) \imp \fo x (x \eq x) $;
+prefix DF20250728151322CST: $\t$ prec 50;
+--|假值⊥
+def DF20250728151329CST: wff = $\neg \t$;
+prefix DF20250728151329CST: $\f$ prec 50;
+--|替换[y/x]
+def DF20250728151053CST(y: set) {x .t: set} (P: wff x): wff = $ \fo t (t \eq y \imp \fo x (x \eq t \imp P)) $;
+notation DF20250728151053CST (y: set) {x: set} (P: wff x): wff = ($\rep{$:50) y ($}{$:0) x ($}$:0) P;
+
+--基本规则--
+--|分离规则
+axiom RU20250728161645CST: $ A $ > $ A \imp B$ > $ B $;
+
+--基本公理--
+--命题逻辑公理
+--|P1公理
+axiom AX20250728175923CST: $ A \imp (B \imp A) $;
+--|P2公理
+axiom AX20250728180116CST: $(A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))$;
+--|P3公理
+axiom AX20250728180127CST: $ (\neg A \imp \neg B) \imp (B \imp A) $;
+--谓词逻辑公理
+--|F1公理
+axiom AX20250728180132CST: $\fo x A \imp \rep{y}{x} A$;
+--|F2公理
+axiom AX20250728180137CST: $ \fo x (A \imp B) \imp (\fo x A \imp \fo x B) $;
+--|F3公理
+axiom AX20250728180141CST: $A \imp \fo x A$;
+--ZFC集合论公理
+--|外延公理
+axiom AX20250728203247CST: $ \fo x \fo y (x \eq y \iff \fo z (z \in x \iff z \in y)) $;
+--|空集公理
+axiom AX20250728204005CST: $ \ex x \fo y (y \nin x) $;
+--|幂集公理
+axiom AX20250728212037CST: $ \fo x \ex y \fo z (z \in y \iff \fo w (w \in z \imp w \in x)) $;
+--|子集公理
+axiom AX20250728214525CST: $ \fo x \ex y \fo z (z \in y \iff (z \in x \and P)) $;
+--|配对公理
+axiom AX20250728214621CST: $ \fo x \fo y \ex u \fo z (z \in u \iff (z \eq x \or z \eq y)) $;
+--|并集公理
+axiom AX20250728214842CST: $ \fo x \ex y \fo z (z \in y \iff \ex u (u \in x \and z \in u)) $;
+--|无穷公理
+axiom AX20250728215034CST: $ \fo x \ex y (x \in y \and \fo z (z \in y \imp \ex w (z \in w \and w \in y))) $;
+--|替换公理
+axiom AX20250728215918CST: $ \fo x (\fo w \ex y \fo z (\fo y P \imp z \eq y) \imp \ex y \fo z (z \in y \iff \ex w (w \in x \and \fo y P))) $;
+--|正则公理
+axiom AX20250728220547CST: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
+--|选择公理
+axiom AX20250728221234CST: $\fo x \ex y \fo z \fo w ((z \in w \and w \in x) \imp \ex v \fo u (\ex t ((u \in w \and w \in t) \and (u \in t \and t \in y)) \iff u \eq v))$;
