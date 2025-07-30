@@ -110,7 +110,7 @@ axiom AX20250729224938CST: $ \fo x \fo y (x \eq y \imp y \eq x) $;
 --|E3公理
 axiom AX20250729231646CST: $ \fo x \fo y \fo z (x \eq y \and y \eq z \imp x \eq z) $;
 --|E4公理
-axiom AX20250729231652CST (P: wff x y) : $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;
+axiom AX20250729231652CST (P Q: wff x y) : $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;
 --ZFC集合论公理
 --|外延公理
 axiom AX20250728203247CST: $ \fo x \fo y (x \eq y \iff \fo z (z \in x \iff z \in y)) $;
@@ -127,7 +127,7 @@ axiom AX20250728214842CST: $ \fo x \ex y \fo z (z \in y \iff \ex u (u \in x \and
 --|无穷公理
 axiom AX20250728215034CST: $ \fo x \ex y (x \in y \and \fo z (z \in y \imp \ex w (z \in w \and w \in y))) $;
 --|替换公理
-axiom AX20250728215918CST (P: wff x y): $ \fo u \fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P)) $;
+axiom AX20250728215918CST (P: wff x y): $ \fo u (\fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P))) $;
 --|正则公理
 axiom AX20250728220547CST: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
 --|选择公理
