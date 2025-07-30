@@ -57,7 +57,7 @@ def DF20250728160116CST {x: set} (P: wff x): wff = $ \neg \ex x P $;
 prefix DF20250728160116CST: $\nex$ prec 50;
 --|存在唯一量词∃!x
 def DF20250728144022CST {x: set} (P: wff x): wff = $ \ex y \fo x (x \eq y \iff P) $;
-prefix DF20250728160116CST: $\exu$ prec 50;
+prefix DF20250728144022CST: $\exu$ prec 50;
 --|限域任意量词(∀x∈y)
 def DF20250730025539CST {x: set} (y: set) (P: wff x): wff = $ \fo x (x \in y \imp P) $;
 notation DF20250730025539CST {x: set} (y: set) (P: wff x): wff = ($\foin{$:50) x ($}{$:0) y ($}$:0) P;
@@ -127,8 +127,8 @@ axiom AX20250728214842CST: $ \fo x \ex y \fo z (z \in y \iff \ex u (u \in x \and
 --|无穷公理
 axiom AX20250728215034CST: $ \fo x \ex y (x \in y \and \fo z (z \in y \imp \ex w (z \in w \and w \in y))) $;
 --|替换公理
-axiom AX20250728215918CST (P: wff x y): $ \fo u (\fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P))) $;
+axiom AX20250728215918CST (P: wff x y) {v: set}: $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;
 --|正则公理
 axiom AX20250728220547CST: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
 --|选择公理
-axiom AX20250728221234CST: $ \fo x \ex y \fo z (z \in x \and \ex u (u \in z) \imp \exu u (u \in z \and \ex w (w \in y \and z \in w \and u \in w))) $;
+axiom AX20250728221234CST: $ \fo x \ex y \fo z (z \in x \and \ex u (u \in z) \imp \exu u (u \in z \and \exin{w}{y} (z \in w \and u \in w))) $;
