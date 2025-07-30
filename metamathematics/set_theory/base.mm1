@@ -26,21 +26,21 @@ def DF20250728122328CST (A B: wff): wff = $ (A \imp B) \and (B \imp A) $;
 infixr DF20250728122328CST: $\iff$ prec 10;
 
 --基本谓词定义--
---|属于谓词x∈y
-term TM20250728140338CST (x y: set): wff;
-infixr TM20250728140338CST: $\in$ prec 60;
 --|等于谓词x=y
 term TM20250728141917CST (x y: set): wff;
 infixr TM20250728141917CST: $\eq$ prec 60;
+--|属于谓词x∈y
+term TM20250728140338CST (x y: set): wff;
+infixr TM20250728140338CST: $\in$ prec 60;
 --|包括谓词x∋y
 def DF20250728183641CST (x y: set): wff = $ y \in x $;
 infixr DF20250728183641CST: $\cov$ prec 60;
---|不属于谓词x/∈y
-def DF20250728181633CST (x y: set): wff = $ \neg (x \in y) $;
-infixr DF20250728181633CST: $\nin$ prec 60;
 --|不等于谓词x/=y
 def DF20250728182213CST (x y: set): wff = $ \neg (x \eq y) $;
 infixr DF20250728182213CST: $\neq$ prec 60;
+--|不属于谓词x/∈y
+def DF20250728181633CST (x y: set): wff = $ \neg (x \in y) $;
+infixr DF20250728181633CST: $\nin$ prec 60;
 --|不包括谓词x/∋y
 def DF20250728183932CST (x y: set): wff = $ \neg (y \in x) $;
 infixr DF20250728183932CST: $\ncov$ prec 60;
