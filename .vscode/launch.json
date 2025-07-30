@@ -1,0 +1,11 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "mm0-rs doc main.mm1",
+      "name": "doc-gen",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}

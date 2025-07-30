@@ -67,7 +67,7 @@ notation DF20250730032017CST {x: set} (y: set) (P: wff x): wff = ($\exin{$:50) x
 --|限域不存在量词(∄x∈y)
 def DF20250730032243CST {x: set} (y: set) (P: wff x): wff = $ \neg \exin{x}{y} P $;
 notation DF20250730032243CST {x: set} (y: set) (P: wff x): wff = ($\nexin{$:50) x ($}{$:0) y ($}$:0) P;
---|限域存在唯一量词(∃!x)
+--|限域存在唯一量词(∃!x∈y)
 def DF20250730033208CST {x: set} (y: set) (P: wff x): wff = $ \exu x (x \in y \and P) $;
 notation DF20250730033208CST {x: set} (y: set) (P: wff x): wff = ($\exuin{$:50) x ($}{$:0) y ($}$:0) P;
 
