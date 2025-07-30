@@ -112,8 +112,8 @@
       <div class="doc"><p>不存在量词∄x</p>
 </div>
       <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728160116CST">DF20250728160116CST</a> {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \neg \ex x P $;
-<span class="kw">prefix</span> <a class="def" href="index.html#DF20250728160116CST">DF20250728160116CST</a>: $<a class="def" href="index.html#DF20250728160116CST">\exu</a>$ <span class="kw">prec</span> <span class="prec">50</span>;
-<span class="kw">prefix</span> <a class="def" href="index.html#DF20250728160116CST">DF20250728160116CST</a>: $<a class="def" href="index.html#DF20250728160116CST">\nex</a>$ <span class="kw">prec</span> <span class="prec">50</span>;</pre>
+<span class="kw">prefix</span> <a class="def" href="index.html#DF20250728160116CST">DF20250728160116CST</a>: $<a class="def" href="index.html#DF20250728160116CST">\nex</a>$ <span class="kw">prec</span> <span class="prec">50</span>;
+<span class="kw">prefix</span> <a class="def" href="index.html#DF20250728160116CST">DF20250728160116CST</a>: $<a class="def" href="index.html#DF20250728160116CST">\exu</a>$ <span class="kw">prec</span> <span class="prec">50</span>;</pre>
     </div>
     <div id="DF20250728144022CST">
       <div class="doc"><p>存在唯一量词∃!x</p>
@@ -141,7 +141,7 @@
     <div id="DF20250730033208CST">
       <div class="doc"><p>限域存在唯一量词(∃!x∈y)</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250730033208CST">DF20250730033208CST</a> {x: <a class="sortname" href="index.html#set">set</a>} (y: <a class="sortname" href="index.html#set">set</a>) (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \exu x (x \in y \and P) $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250730033208CST">DF20250730033208CST</a> {x: <a class="sortname" href="index.html#set">set</a>} (y: <a class="sortname" href="index.html#set">set</a>) (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \nex x (x \in y \and P) $;
 <span class="kw">notation</span> <a class="def" href="index.html#DF20250730033208CST">DF20250730033208CST</a> {x: <a class="sortname" href="index.html#set">set</a>} (y: <a class="sortname" href="index.html#set">set</a>) (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = ($\exuin{$:<span class="prec">50</span>) x ($}{$:<span class="prec">0</span>) y ($}$:<span class="prec">0</span>) P;</pre>
     </div>
     <div id="DF20250728151322CST">
@@ -215,7 +215,7 @@
     <div id="AX20250729231652CST">
       <div class="doc"><p>E4公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250729231652CST.html">AX20250729231652CST</a> (P Q: <a class="sortname" href="index.html#wff">wff</a>) {x y: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250729231652CST.html">AX20250729231652CST</a> (Q: <a class="sortname" href="index.html#wff">wff</a>) {x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;</pre>
     </div>
     <div id="AX20250728203247CST">
       <div class="doc"><p>外延公理</p>
@@ -235,7 +235,7 @@
     <div id="AX20250728214525CST">
       <div class="doc"><p>子集公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728214525CST.html">AX20250728214525CST</a> (P: <a class="sortname" href="index.html#wff">wff</a>) {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \ex y \fo z (z \in y \iff z \in x \and P) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728214525CST.html">AX20250728214525CST</a> {x y z: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> z): $ \fo x \ex y \fo z (z \in y \iff z \in x \and P) $;</pre>
     </div>
     <div id="AX20250728214621CST">
       <div class="doc"><p>配对公理</p>
@@ -255,7 +255,7 @@
     <div id="AX20250728215918CST">
       <div class="doc"><p>替换公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728215918CST.html">AX20250728215918CST</a> (P: <a class="sortname" href="index.html#wff">wff</a>) (a: <a class="sortname" href="index.html#set">set</a>) {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo y \ex x \fo z (P \imp z \eq x) \imp \ex x \fo z (z \in x \iff \ex y (y \in a \and P)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728215918CST.html">AX20250728215918CST</a> {u v x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo u \fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P)) $;</pre>
     </div>
     <div id="AX20250728220547CST">
       <div class="doc"><p>正则公理</p>
@@ -266,7 +266,7 @@
       <div class="doc"><p>选择公理</p>
 </div>
       <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728221234CST.html">AX20250728221234CST</a> {u w x y z: <a class="sortname" href="index.html#set">set</a>}:
-  $ \fo x \ex y \fo z (z \in x \and \ex u u \in z \imp \exu u (u \in z \and \ex w (w \in y \and z \in w \and u \in w))) $;</pre>
+  $ \fo x \ex y \fo z (z \in x \and \ex u u \in z \imp \nex u (u \in z \and \ex w (w \in y \and z \in w \and u \in w))) $;</pre>
     </div>
   </div>
 </body>

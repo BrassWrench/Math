@@ -21,9 +21,9 @@
     </h1>
       <div class="doc"><p>替换公理</p>
 </div>
-    <pre>axiom AX20250728215918CST (P: wff) (a: set) {x y z: set}:
-  $ \fo y \ex x \fo z (P \imp z \eq x) \imp
-    \ex x \fo z (z \in x \iff \ex y (y \in a \and P)) $;</pre>
+    <pre>axiom AX20250728215918CST {u v x y: set} (P: wff x y):
+  $ \fo u \fo x \ex v \fo y (P \imp y \eq v) \imp
+    \ex v \fo y (y \in v \iff \ex x (x \in u \and P)) $;</pre>
   </div>
 </body>
 </html>
