@@ -89,46 +89,45 @@ axiom mp: $ A $ > $ A \imp B$ > $ B $;
 --基本公理--
 --命题逻辑公理
 --|P1公理
-axiom axp1: $ A \imp (B \imp A) $;
+axiom ax_p1: $ A \imp (B \imp A) $;
 --|P2公理
-axiom axp2: $(A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))$;
+axiom ax_p2: $(A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))$;
 --|P3公理
-axiom axp3: $ (\neg A \imp \neg B) \imp (B \imp A) $;
+axiom ax_p3: $ (\neg A \imp \neg B) \imp (B \imp A) $;
 --谓词逻辑公理
 --|F1公理
-axiom axf1: $\fo x A \imp \rep{y}{x} A$;
+axiom ax_f1: $\fo x A \imp \rep{y}{x} A$;
 --|F2公理
-axiom axf2: $ \fo x (A \imp B) \imp (\fo x A \imp \fo x B) $;
+axiom ax_f2: $ \fo x (A \imp B) \imp (\fo x A \imp \fo x B) $;
 --|F3公理
-axiom axf3: $ A \imp \fo x A $;
-
+axiom ax_f3: $ A \imp \fo x A $;
 --等式公理
 --|E1公理
-axiom axe1: $ \fo x (x \eq x) $;
+axiom ax_e1: $ \fo x (x \eq x) $;
 --|E2公理
-axiom axe2: $ \fo x \fo y (x \eq y \imp y \eq x) $;
+axiom ax_e2: $ \fo x \fo y (x \eq y \imp y \eq x) $;
 --|E3公理
-axiom axe3: $ \fo x \fo y \fo z (x \eq y \and y \eq z \imp x \eq z) $;
+axiom ax_e3: $ \fo x \fo y \fo z (x \eq y \and y \eq z \imp x \eq z) $;
 --|E4公理
-axiom axe4 (P Q: wff x y) : $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;
+axiom ax_e4 (P Q: wff x y) : $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;
 --ZFC集合论公理
 --|外延公理
-axiom axext: $ \fo x \fo y (x \eq y \iff \fo z (z \in x \iff z \in y)) $;
+axiom ax_ext: $ \fo x \fo y (x \eq y \iff \fo z (z \in x \iff z \in y)) $;
 --|空集公理
-axiom axemp: $ \ex x \fo y (y \nin x) $;
+axiom ax_emp: $ \ex x \fo y (y \nin x) $;
 --|幂集公理
-axiom axpow: $ \fo x \ex y \fo z (z \in y \iff \fo w (w \in z \imp w \in x)) $;
+axiom ax_pow: $ \fo x \ex y \fo z (z \in y \iff \fo w (w \in z \imp w \in x)) $;
 --|子集公理
-axiom axsub (P: wff z): $ \fo x \ex y \fo z (z \in y \iff (z \in x \and P)) $;
+axiom ax_sub (P: wff z): $ \fo x \ex y \fo z (z \in y \iff (z \in x \and P)) $;
 --|配对公理
-axiom axpai: $ \fo x \fo y \ex u \fo z (z \in u \iff (z \eq x \or z \eq y)) $;
+axiom ax_pai: $ \fo x \fo y \ex u \fo z (z \in u \iff (z \eq x \or z \eq y)) $;
 --|并集公理
-axiom axuni: $ \fo x \ex y \fo z (z \in y \iff \ex u (u \in x \and z \in u)) $;
+axiom ax_uni: $ \fo x \ex y \fo z (z \in y \iff \ex u (u \in x \and z \in u)) $;
 --|无穷公理
-axiom axinf: $ \fo x \ex y (x \in y \and \fo z (z \in y \imp \ex w (z \in w \and w \in y))) $;
+axiom ax_inf: $ \fo x \ex y (x \in y \and \fo z (z \in y \imp \ex w (z \in w \and w \in y))) $;
 --|替换公理
-axiom axrep (P: wff x y): $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;
+axiom ax_rep (P: wff x y): $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;
 --|正则公理
-axiom axreg: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
+axiom ax_reg: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
 --|选择公理
-axiom axcho: $ \fo x \ex y \fo z (z \in x \and \ex u (u \in z) \imp \exu u (u \in z \and \exin{w}{y} (z \in w \and u \in w))) $;
+axiom ax_cho: $ \fo x \ex y \fo z (z \in x \and \ex u (u \in z) \imp \exu u (u \in z \and \exin{w}{y} (z \in w \and u \in w))) $;
