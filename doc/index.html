@@ -215,7 +215,7 @@
     <div id="AX20250729231652CST">
       <div class="doc"><p>E4公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250729231652CST.html">AX20250729231652CST</a> (Q: <a class="sortname" href="index.html#wff">wff</a>) {x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250729231652CST.html">AX20250729231652CST</a> {x y: <a class="sortname" href="index.html#set">set</a>} (P Q: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;</pre>
     </div>
     <div id="AX20250728203247CST">
       <div class="doc"><p>外延公理</p>
@@ -255,7 +255,7 @@
     <div id="AX20250728215918CST">
       <div class="doc"><p>替换公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728215918CST.html">AX20250728215918CST</a> {u v x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo u \fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/AX20250728215918CST.html">AX20250728215918CST</a> {u v x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo u (\fo x \ex v \fo y (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \ex x (x \in u \and P))) $;</pre>
     </div>
     <div id="AX20250728220547CST">
       <div class="doc"><p>正则公理</p>
