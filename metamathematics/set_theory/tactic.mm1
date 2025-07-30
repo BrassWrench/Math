@@ -30,21 +30,34 @@ do{
     (def (len l) @ foldl l 0 (fn (n _) {n + 1}))
     --|过滤函数(filter l p)：l是一个列表，(p x)是一个有一个参数的函数。将l中的项作为p的参数执行，筛选出返回值为#t的项并打包成列表返回。
     (def (filter l p) @ foldl l () @ fn (l2 x) @ if (p x) (cons x l2) l2)
+    --|重复函数(repeat a n)：返回一个含有n个a的列表(a a ··· a)。
     (def (repeat a n) (if {n = 0} () (cons a (repeat a {n - 1}))))
+    --|迭代函数(iterate n f a)：返回(f (f ··· (f a)))，其中f被执行n次。
     (def (iterate n f a) (if {n = 0} a (f (iterate {n - 1} f a))))
+    --|查询生成函数(find l)：l是一个映射（形如((k1 v1) (k2 v2) ··· (kn vn))的列表），返回一个函数，该函数接收一个参数k，寻找l中k对应的v，找不到则返回#undef。
     (def (find l) @ match l
     [((k v) . l) (def f (find l)) @ fn (a) @ if {k == a} v (f a)]
     [() @ fn (a)])
+    --|阻止繁饰函数(verb e)：给表达式e加上:verb标签并返回（保持错误等输出信息位置与e相同）。:verb标签用于告诉验证器不需要对其进行繁饰。
     (def (verb e) (copy-span e (list ':verb e)))
+    --|符合策略函数(exact e)：将定理e尝试与第一个目标匹配，如果匹配则解决该目标。
     (def (exact e) (refine (verb e)))
+    --|当前结果函数(result)：返回当前目标。
     (def (result) (hd (get-goals)))
+    --|当前目标函数(target)：返回当前目标的表达式。
     (def (target) (goal-type (result)))
+    --|检查结果函数(inspect-result f)：(f)是一个没有参数的策略函数。打印当前目标后执行策略(f)。
     (def (inspect-result f) (def g (result)) (refine (f)) (display @ pp g))
+    --|等待函数(later)：会将当前的第一个目标移动到最后一个目标（即先不解决）。
     (def (later) @ match (get-goals)
     [(g . gs) (apply set-goals @ append gs @ list g)])
+    --|元变量类型函数(mvar-sort m)：m是一个元变量，返回m的类型。
     (def mvar-sort @ match-fn @ (mvar s _) s)
+    --|报告函数(report a)：a是一个公式。打印当前目标后试图用a匹配证明当前目标。
     (def (report a) (def g (result)) (refine a) (print g))
+    --|原子映射创建函数(atom-map (k1 v1) (k2 v2) ··· (kn vn))：创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。
     (def (atom-map . xs) (get! @ apply atom-map! xs))
+    --|原子查询生成函数(lookup-fn xs)：xs是一个创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。
     (def (lookup-fn xs) (def m (apply atom-map xs)) (fn k (apply lookup m k)))
     (def (atom-app . xs) (string->atom (apply string-append (map ->string xs))))
     (def transpose @ match-fn*

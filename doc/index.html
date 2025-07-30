@@ -60,17 +60,17 @@
       <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728122328CST">DF20250728122328CST</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): <a class="sortname" href="index.html#wff">wff</a> = $ (A \imp B) \and (B \imp A) $;
 <span class="kw">infixr</span> <a class="def" href="index.html#DF20250728122328CST">DF20250728122328CST</a>: $<a class="def" href="index.html#DF20250728122328CST">\iff</a>$ <span class="kw">prec</span> <span class="prec">10</span>;</pre>
     </div>
-    <div id="TM20250728140338CST">
-      <div class="doc"><p>属于谓词x∈y</p>
-</div>
-      <pre><span class="kw">term</span> <a class="term" href="index.html#TM20250728140338CST">TM20250728140338CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a>;
-<span class="kw">infixr</span> <a class="term" href="index.html#TM20250728140338CST">TM20250728140338CST</a>: $<a class="term" href="index.html#TM20250728140338CST">\in</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
-    </div>
     <div id="TM20250728141917CST">
       <div class="doc"><p>等于谓词x=y</p>
 </div>
       <pre><span class="kw">term</span> <a class="term" href="index.html#TM20250728141917CST">TM20250728141917CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a>;
 <span class="kw">infixr</span> <a class="term" href="index.html#TM20250728141917CST">TM20250728141917CST</a>: $<a class="term" href="index.html#TM20250728141917CST">\eq</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
+    </div>
+    <div id="TM20250728140338CST">
+      <div class="doc"><p>属于谓词x∈y</p>
+</div>
+      <pre><span class="kw">term</span> <a class="term" href="index.html#TM20250728140338CST">TM20250728140338CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a>;
+<span class="kw">infixr</span> <a class="term" href="index.html#TM20250728140338CST">TM20250728140338CST</a>: $<a class="term" href="index.html#TM20250728140338CST">\in</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
     <div id="DF20250728183641CST">
       <div class="doc"><p>包括谓词x∋y</p>
@@ -78,22 +78,22 @@
       <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728183641CST">DF20250728183641CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ y \in x $;
 <span class="kw">infixr</span> <a class="def" href="index.html#DF20250728183641CST">DF20250728183641CST</a>: $<a class="def" href="index.html#DF20250728183641CST">\cov</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
-    <div id="DF20250728181633CST">
-      <div class="doc"><p>不属于谓词x/∈y</p>
-</div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728181633CST">DF20250728181633CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x \in y $;
-<span class="kw">infixr</span> <a class="def" href="index.html#DF20250728181633CST">DF20250728181633CST</a>: $<a class="def" href="index.html#DF20250728181633CST">\nin</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
-    </div>
     <div id="DF20250728182213CST">
       <div class="doc"><p>不等于谓词x/=y</p>
 </div>
       <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728182213CST">DF20250728182213CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x \eq y $;
 <span class="kw">infixr</span> <a class="def" href="index.html#DF20250728182213CST">DF20250728182213CST</a>: $<a class="def" href="index.html#DF20250728182213CST">\neq</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
+    <div id="DF20250728181633CST">
+      <div class="doc"><p>不属于谓词x/∈y</p>
+</div>
+      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728181633CST">DF20250728181633CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x \in y $;
+<span class="kw">infixr</span> <a class="def" href="index.html#DF20250728181633CST">DF20250728181633CST</a>: $<a class="def" href="index.html#DF20250728181633CST">\nin</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
+    </div>
     <div id="DF20250728183932CST">
       <div class="doc"><p>不包括谓词x/∋y</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728183932CST">DF20250728183932CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg y \in x $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#DF20250728183932CST">DF20250728183932CST</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x \cov y $;
 <span class="kw">infixr</span> <a class="def" href="index.html#DF20250728183932CST">DF20250728183932CST</a>: $<a class="def" href="index.html#DF20250728183932CST">\ncov</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
     <div id="TM20250728135829CST">
