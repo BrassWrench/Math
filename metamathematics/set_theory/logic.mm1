@@ -16,8 +16,8 @@ theorem il: $ A \imp B \imp A $ = '(ax_p1);
 theorem iil: $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $ = '(ax_p2);
 --|同一律
 theorem irfl: $ A \imp A $ = (focus
-    (have 's1 'iil)
-    (have 's2 'il)
-    (have 's3 '(mp s1 s2))
-    (have 's4 '(! il _ A))
-    (have 's5 '(mp s3 s4))'(s5));
+    (have 's1 $(A \imp ((A \imp A) \imp A)) \imp ((A \imp (A \imp A)) \imp (A \imp A))$ 'iil)
+    (have 's2 $ A \imp ((A \imp A) \imp A) $ 'il)
+    (have 's3 $ (A \imp (A \imp A)) \imp (A \imp A) $ '(mp s1 s2))
+    (have 's4 $ A \imp (A \imp A) $ 'il)
+    (have 's5 $ A \imp A $ '(mp s3 s4)) '(s5));
