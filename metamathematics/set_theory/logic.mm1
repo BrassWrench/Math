@@ -1,1 +1,20 @@
 import "D:/BaiduSyncdisk/Math/metamathematics/set_theory/base.mm1";
+
+--命题逻辑(蕴涵)--
+
+--|MP规则
+theorem mp (h1: $ A \imp B $) (h2: $ A $): $ B $ = '(! ax_mp A B h1 h2);
+
+do{
+  --|推广MP规则(mps thm h1 h2 ··· hn)：连续运用分离规则MP，(mps $A1 \imp A2 \imp ··· \imp An \imp B$ $A1$ $A2$ ··· $An$)可得到$B$的证明。
+  (def (mps thm . hs) (foldl hs thm (fn (a b) '(mp ,a ,b))))
+};
+
+theorem il: $ A \imp B \imp A $ = '(ax_p1);
+theorem iil: $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $ = '(ax_p2);
+theorem irfl: $ A \imp A $ = (focus
+    (have 's1 'iil)
+    (have 's2 'il)
+    (have 's3 '(mp s1 s2))
+    (have 's4 '(! il _ A))
+    (have 's5 '(mp s3 s4))'(s5));

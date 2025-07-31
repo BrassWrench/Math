@@ -83,8 +83,8 @@ def rep (y: set) {x .t: set} (P: wff x): wff = $ \fo t (t \eq y \imp \fo x (x \e
 notation rep (y: set) {x: set} (P: wff x): wff = ($\rep{$:50) y ($}{$:0) x ($}$:0) P;
 
 --基本规则--
---|推理规则MP
-axiom mp: $ A $ > $ A \imp B$ > $ B $;
+--|分离规则MP
+axiom ax_mp: $ A \imp B $ > $ A $ > $ B $;
 
 --基本公理--
 --命题逻辑公理

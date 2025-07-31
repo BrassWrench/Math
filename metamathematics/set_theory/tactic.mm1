@@ -40,13 +40,13 @@ do{
     [() @ fn (a)])
     --|阻止繁饰函数(verb e)：给表达式e加上:verb标签并返回（保持错误等输出信息位置与e相同）。:verb标签用于告诉验证器不需要对其进行繁饰。
     (def (verb e) (copy-span e (list ':verb e)))
-    --|符合策略函数(exact e)：将定理e尝试与第一个目标匹配，如果匹配则解决该目标。
+    --|符合策略(exact e)：将定理e尝试与第一个目标匹配，如果匹配则解决该目标。
     (def (exact e) (refine (verb e)))
     --|当前结果函数(result)：返回当前目标。
     (def (result) (hd (get-goals)))
     --|当前目标函数(target)：返回当前目标的表达式。
     (def (target) (goal-type (result)))
-    --|检查结果函数(inspect-result f)：(f)是一个没有参数的策略函数。打印当前目标后执行策略(f)。
+    --|检查结果函数(inspect-result f)：(f)是一个没有参数的策略。打印当前目标后执行策略(f)。
     (def (inspect-result f) (def g (result)) (refine (f)) (display @ pp g))
     --|等待函数(later)：会将当前的第一个目标移动到最后一个目标（即先不解决）。
     (def (later) @ match (get-goals)
@@ -59,26 +59,39 @@ do{
     (def (atom-map . xs) (get! @ apply atom-map! xs))
     --|原子查询生成函数(lookup-fn xs)：xs是一个创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。
     (def (lookup-fn xs) (def m (apply atom-map xs)) (fn k (apply lookup m k)))
+    --|原子名连接函数(atom-app x1 x2 ··· xn)：x1,x2,···,xn都是原子项。函数返回一个以将x1,x2,···,xn的名字连接起来为名字的原子项
     (def (atom-app . xs) (string->atom (apply string-append (map ->string xs))))
+    --|矩阵转置函数(transpose xs)或(transpose n xs)：xs是一个a×b的矩阵（一个长度为a的列表，该列表的每一个项为长度为b的列表，形如((m11 m12 m13 ···) (m21 m22 m23 ···) ···)）。若调用形式为(transpose xs)，则直接返回xs的转置（形如((m11 m21 m31 ···) (m12 m22 m32 ···) ···)）；若调用形式为(transpose n xs)，则当xs为空的时候返回一个长度为n的列表，其中每一项都是空（形如(() () () ···)）。
     (def transpose @ match-fn*
     [(xs) (apply map list xs)]
     [(n xs) (if (null? xs) (repeat () n) (apply map list xs))])
+    --|连接函数(join x1 x2 ··· xn)：将列表x1,x2,···,xn连接起来。
     (def (join xs) (apply append xs))
+    --|右map函数(rmap x1 x2 ··· xn f)：相当于执行(map f x1 x2 ··· xn)。
     (def (rmap . args) (apply map (split-last args)))
+    --|扫描函数(scan x1 x2 ··· xn f)：执行(map f x1 x2 ··· xn)并不返回任何值（用f扫描x1,x2,···,xn）。
     (def (scan . args) (apply rmap args) #undef)
+    --|检查未定义函数(undef? x)：如果x被定义，则返回#t，否则返回#f。
     (def (undef? x) (not (def? x)))
+    --|错误报告函数(error-at)：在sp处报告错误msg。
     (def (error-at sp msg) (report-at 'error sp msg))
+    --|信息报告函数(info-at)：在sp处报告信息msg。
     (def (info-at sp msg) (report-at 'info sp msg))
+    --|目标创建函数(goal! ty)或(goal! pos ty)：当调用形式为(goal! ty)时，创建目标ty并返回其引用。当调用形式为(goal! pos ty)时，创建目标ty，并将pos位置信息转移到目标上并返回其引用。
     (def goal! @ match-fn*
     [(ty) (ref! (goal ty))]
     [(pos ty) (ref! (copy-span pos (goal ty)))])
+    --|交换策略(swap)：将当前目标移动至目标队列末尾。
     (def (swap) @ match (get-goals) [(x . y) (apply set-goals @ append y @ list x)])
+    --|满足策略(suffices h)或(suffices h e)或(suffices h p)或(suffices h e p)：创建一个新假设h，e是h的表达式(可选)，p是h的证明(可选)，如果不提供证明则在目标队列中添加h至末尾。
     (def suffices @ match-fn*
     [(h) (have h _) (swap)]
     [xs (apply have xs) (swap)])
+    --|获取证明函数(get-proof x)：x是一个定理，返回x的证明。
     (def (get-proof x) @ match (get-decl x)
     [('theorem _ _ _ _ _ pf) (hd @ tl @ pf)]
     [_ (error "not a theorem")])
+    --|打印证明函数(pp-proof x)：x是一个定理，打印x的证明。
     (def (pp-proof x) (display @ pp @ get-proof x))
 
     --| This utility will take a verbatim proof and "unelaborate" it into a refine script

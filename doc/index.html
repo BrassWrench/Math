@@ -162,10 +162,10 @@
       <pre><span class="kw">def</span> <a class="def" href="index.html#rep">rep</a> (y: <a class="sortname" href="index.html#set">set</a>) {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \fo t (t \eq y \imp \fo x (x \eq t \imp P)) $;
 <span class="kw">notation</span> <a class="def" href="index.html#rep">rep</a> (y: <a class="sortname" href="index.html#set">set</a>) {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = ($\rep{$:<span class="prec">50</span>) y ($}{$:<span class="prec">0</span>) x ($}$:<span class="prec">0</span>) P;</pre>
     </div>
-    <div id="mp">
-      <div class="doc"><p>推理规则MP</p>
+    <div id="ax_mp">
+      <div class="doc"><p>分离规则MP</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/mp.html">mp</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ A $ &gt; $ A \imp B $ &gt; $ B $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_mp.html">ax_mp</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ A \imp B $ &gt; $ A $ &gt; $ B $;</pre>
     </div>
     <div id="ax_p1">
       <div class="doc"><p>P1公理</p>
@@ -266,6 +266,20 @@
       <div class="doc"><p>选择公理</p>
 </div>
       <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_cho.html">ax_cho</a> {u w x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \ex y \fo z (z \in x \and \ex u u \in z \imp \exu u (u \in z \and \exin{w}{y} (z \in w \and u \in w))) $;</pre>
+    </div>
+    <div id="mp">
+      <div class="doc"><p>MP规则</p>
+</div>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/mp.html">mp</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ A \imp B $ &gt; $ A $ &gt; $ B $;</pre>
+    </div>
+    <div id="il">
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/il.html">il</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ A \imp B \imp A $;</pre>
+    </div>
+    <div id="iil">
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iil.html">iil</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $;</pre>
+    </div>
+    <div id="irfl">
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/irfl.html">irfl</a> (A: <a class="sortname" href="index.html#wff">wff</a>): $ A \imp A $;</pre>
     </div>
   </div>
 </body>
