@@ -10,8 +10,11 @@ do{
   (def (mps thm . hs) (foldl hs thm (fn (a b) '(mp ,a ,b))))
 };
 
+--|→左引入
 theorem il: $ A \imp B \imp A $ = '(ax_p1);
+--|→对→左插入
 theorem iil: $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $ = '(ax_p2);
+--|同一律
 theorem irfl: $ A \imp A $ = (focus
     (have 's1 'iil)
     (have 's2 'il)
