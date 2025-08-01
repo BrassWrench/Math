@@ -42,6 +42,6 @@ theorem iilp: $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ = (focus
   (have 's11 $ (A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C))) $ 'ili)
   (have 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ '(mp s10 s11)) 's12);
 --|→对→右逆引入
-theorem iirri: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
+theorem iirvi: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
   (have 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
   (have 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ '(mp iilp s1)) 's2);
