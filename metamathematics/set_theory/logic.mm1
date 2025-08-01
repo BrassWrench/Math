@@ -11,13 +11,37 @@ do{
 };
 
 --|→左引入
-theorem il: $ A \imp B \imp A $ = '(ax_p1);
+theorem ili: $ A \imp B \imp A $ = '(ax_p1);
 --|→对→左插入
-theorem iil: $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $ = '(ax_p2);
+theorem iils: $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ = '(ax_p2);
 --|同一律
-theorem irfl: $ A \imp A $ = (focus
-    (have 's1 $(A \imp ((A \imp A) \imp A)) \imp ((A \imp (A \imp A)) \imp (A \imp A))$ 'iil)
-    (have 's2 $ A \imp ((A \imp A) \imp A) $ 'il)
-    (have 's3 $ (A \imp (A \imp A)) \imp (A \imp A) $ '(mp s1 s2))
-    (have 's4 $ A \imp (A \imp A) $ 'il)
-    (have 's5 $ A \imp A $ '(mp s3 s4)) '(s5));
+theorem irf: $ A \imp A $ = (focus
+    (have 's1 $ A \imp ((A \imp A) \imp A) $ 'ili)
+    (have 's2 $ (A \imp (A \imp A)) \imp (A \imp A) $ '(mp iils s1))
+    (have 's3 $ A \imp (A \imp A) $ 'ili)
+    (have 's4 $ A \imp A $ '(mp s2 s3)) 's4);
+--|→对→左引入
+theorem iili: $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ = (focus
+    (have 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
+    (have 's2 $ (B \imp C) \imp ((A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))) $ '(mp ili s1))
+    (have 's3 $ ((B \imp C) \imp (A \imp (B \imp C))) \imp ((B \imp C) \imp ((A \imp B) \imp (A \imp C))) $ '(mp iils s2))
+    (have 's4 $ (B \imp C) \imp (A \imp (B \imp C)) $ 'ili)
+    (have 's5 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ '(mp s3 s4)) 's5);
+--|→对→左置换
+theorem iilp: $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ = (focus
+  (have 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
+  (have 's2 $ ((A \imp (B \imp C)) \imp (A \imp B)) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp iils s1))
+  (have 's3 $ ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B))) \imp ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ '(mp iili s2))
+  (have 's4 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B)) $ 'ili)
+  (have 's5 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp s3 s4))
+  (have 's6 $ (B \imp (A \imp B)) \imp (B \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ '(mp iili s5))
+  (have 's7 $ B \imp (A \imp B) $ 'ili)
+  (have 's8 $ B \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp s6 s7))
+  (have 's9 $ (B \imp (A \imp (B \imp C))) \imp (B \imp (A \imp C)) $ '(mp iils s8))
+  (have 's10 $ ((A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C)))) \imp ((A \imp (B \imp C)) \imp (B \imp (A \imp C))) $ '(mp iili s9))
+  (have 's11 $ (A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C))) $ 'ili)
+  (have 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ '(mp s10 s11)) 's12);
+--|→对→右逆引入
+theorem iirri: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
+  (have 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
+  (have 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ '(mp iilp s1)) 's2);
