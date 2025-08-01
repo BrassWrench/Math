@@ -1,15 +1,12 @@
 import "D:/BaiduSyncdisk/Math/metamathematics/set_theory/base.mm1";
 
 --命题逻辑(蕴涵)--
-
 --|MP规则
 theorem mp (h1: $ A \imp B $) (h2: $ A $): $ B $ = '(! ax_mp A B h1 h2);
-
 do{
   --|推广MP规则(mps thm h1 h2 ··· hn)：连续运用分离规则MP，(mps $A1 \imp A2 \imp ··· \imp An \imp B$ $A1$ $A2$ ··· $An$)可得到$B$的证明。
   (def (mps thm . hs) (foldl hs thm (fn (a b) '(mp ,a ,b))))
 };
-
 --|→左引入
 theorem ili: $ A \imp B \imp A $ = '(ax_p1);
 --|→对→左插入
@@ -45,3 +42,12 @@ theorem iilp: $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ = (focus
 theorem iirvi: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
   (have 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
   (have 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ '(mp iilp s1)) 's2);
+--|→传递规则
+theorem itr (h1: $ A \imp B $) (h2: $ B \imp C $): $ A \imp C$ = (focus
+  (have 's1 $ A \imp B $ 'h1)
+  (have 's2 $ B \imp C $ 'h2)
+  (have 's3 $ A \imp C $ (mps 'iirvi 's1 's2)) 's3);
+do{
+  --|推广→传递规则(itrs h1 h2 ··· hn)：连续运用→传递规则，(itrs $A1 \imp A2$ $A2 \imp A3$ ··· $An-1 \imp An$)可得到$A1 \imp An$的证明。
+  (def (itrs . hs) (foldl (tl hs) (hd hs) (fn (a b) '(itr ,a ,b))))
+};

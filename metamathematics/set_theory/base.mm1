@@ -131,3 +131,5 @@ axiom ax_rep (P: wff x y): $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp \ex 
 axiom ax_reg: $ \fo x (\ex y (y \in x) \imp \ex y (y \in x \and \fo z (z \in y \imp \neg z \in x))) $;
 --|选择公理
 axiom ax_cho: $ \fo x \ex y \fo z (z \in x \and \ex u (u \in z) \imp \exu u (u \in z \and \exin{w}{y} (z \in w \and u \in w))) $;
+
+do(add-axiom-set! 'ZFC "ZFC公理集合论系统" '(ax_mp ax_p1 ax_p2 ax_p3 ax_f1 ax_f2 ax_f3 ax_e1 ax_e2 ax_e3 ax_e4 ax_ext ax_emp ax_pow ax_sub ax_pai ax_uni ax_inf ax_rep ax_reg ax_cho));

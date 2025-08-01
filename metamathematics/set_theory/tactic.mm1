@@ -94,6 +94,11 @@ do{
     --|打印证明函数(pp-proof x)：x是一个定理，打印x的证明。
     (def (pp-proof x) (display @ pp @ get-proof x))
 
+    --|公理组
+    (def axiom-sets (atom-map!))
+    --|添加公理组函数(add-axiom-set! x doc xs)：x是一个原子表示该公理组的名字，doc是一个字符串是该公里组的描述，xs是一个列表，内含该公理组的公理。
+    (def (add-axiom-set! x doc xs) (insert! axiom-sets x (cons doc xs)))
+
     --| This utility will take a verbatim proof and "unelaborate" it into a refine script
     --| using ! on every step. This is useful to get `refine` to re-typecheck a term when
     --| testing tactics which produce verbatim proofs.
@@ -107,12 +112,6 @@ do{
         (cons '! f @ args (nth 2 @ get-decl f) xs)]
         [e e]])
     rec)
-
-    --| This is a special variable used by `mm0-rs doc` to shorten axiom list printouts.
-    --| It is an atom map from a name for the axiom list to a list of axioms.
-    (def axiom-sets (atom-map!))
-    --| Declare a new axiom set, which is used by the docgen tool to shorten axiom lists.
-    (def (add-axiom-set! x doc xs) (insert! axiom-sets x (cons doc xs)))
 
     --| `(named pf)` wraps a proof script `pf`, runs it, then gathers all
     --| unassigned metavariables and assigns them to dummies.
