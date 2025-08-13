@@ -429,7 +429,7 @@ do {
 
 theorem a1i (h: $ b $): $ a -> b $ = '(ax_1 h);
 theorem a2i (h: $ a -> b -> c $): $ (a -> b) -> (a -> c) $ = '(ax_2 h);
-theorem mpd (h1: $ a -> b $) (h2: $ a -> b -> c $): $ a -> c $ = '(ax_2 h2 h1);
+theorem mpd (h1: $ a -> b$) (h2: $ a -> b -> c $): $ a -> c $ = '(ax_2 h2 h1);
 theorem mpi (h1: $ b $) (h2: $ a -> b -> c $): $ a -> c $ = '(mpd (a1i h1) h2);
 theorem id: $ a -> a $ = '(mpd (! ax_1 _ a) ax_1);
 theorem idd: $ a -> b -> b $ = '(a1i id);
@@ -1311,6 +1311,7 @@ theorem pimexeqed (a: nat) (p: wff x y) (q: wff x) (p2 q2: wff y)
 
 -- FOL mode: a natural deduction language that compiles to MM0 peano axioms
 do {
+  --|创建一个上下文管理列表，存储fol目标，格式为(G hm hs rhs g)组成的列表，G是包含上下文信息的公式；hm是假设映射，结构为(h (R pr))，其中h是假设名称，R是假设内容项，pr是假设证明；hs是
   (def folmode-context (ref!))
 
   --| `(folmode)` initializes the FOL goal state from the MM0 goal state.
@@ -1341,42 +1342,43 @@ do {
   --|
   --| The last argument to folmode is a refine script that is passed to `(folrefine)`.
   (def (folmode . vs)
-    @ match (match (split-last vs) [() '(#undef)] [r r]) @ (r . vs)
+    @ match (match (split-last vs) [() '(#undef)] [r r]) @ (r . vs) --r是证明表达式，vs是假设
     (set! folmode-context
       (def vs (ref! vs))
-      @ rmap (get-goals) @ fn (g)
-      (def t (goal-type g))
-      @ match (match t [('im G R) (list G R)] [_ (list #undef t)]) @ (G rhs)
-      (def hs1 (rmap (local-ctx) @ fn (h)
-        (def t (infer-type h))
-        @ if (undef? G) '(,h (,t ,h))
-        @ match t
-          [('im L R) (=> break)
-            @ letrec ([upgrade @ match-fn
-              [(? (fn (G) {L == G})) h]
-              [('an G1 D) '(anwl ,G1 ,D ,R ,(upgrade G1))]
-              [_ (break)]])
-            '(,h (,R ,(upgrade G)))]
-          [_ '(,h (,t (a1i ,G ,t ,h)))]))
+      @ rmap (get-goals) @ fn (g) --对目前的goal进行处理
+      (def t (goal-type g)) --获取当前处理的goal的表达式，在案例中此时t就是G /\ c -> a /\ b
+      @ match (match t [('im G R) (list G R)] [_ (list #undef t)]) @ (G rhs) --G是上下文即当前goal：G -> a中的G，rhs是当前goal：G -> a中的a。在案例中G是G /\ c，rhs是a /\ b
+      (def hs1 (rmap (local-ctx) @ fn (h) --构造新的假设列表（未引入新的假设版本）
+        (def t (infer-type h)) --注意这里定义了新的t覆盖了上文的goal-type g，这里的t的意思是local-ctx中的假设的表达式。案例中这个t现在变成G -> a（G -> b类似）
+        @ if (undef? G) '(,h (,t ,h)) --G没被定义的情况下，对于原本的local-ctx中的假设，在hs1中加入(h (t h))（此时假设证明就是h，即假设无需证明）。
+        @ match t --如果定义了G，则继续分类讨论
+          [('im L R) (=> break) --如果假设t的形式为L -> R，在案例中L就是G，R就是a（G -> b同理）
+            @ letrec ([upgrade @ match-fn 
+              [(? (fn (G) {L == G})) h] --如果当前的G就是假设h表达式t的前件L，则引用假设h
+              [('an G1 D) '(anwl ,G1 ,D ,R ,(upgrade G1))] --如果假设h表达式t是G1 /\ D -> R的形式，则递归求解G1 -> R的证明来证明G1 /\ D -> R
+              [_ (break)]]) --如果这两种情况都不是，则跳过到下一种情况
+            '(,h (,R ,(upgrade G)))] --返回假设h的内容，包括假设右件R，以及调用定义的upgrade处理G得到G -> R的证明
+            --在案例中，得到(h1 (a 'G /\ c -> a的证明') 
+          [_ '(,h (,t (a1i ,G ,t ,h)))])) --如果假设t的形式不是L -> R，则由t和前件引入得到G -> t的证明。
       (def hs
-        @ if (undef? G) hs1
-        @ letrec ([add-locals @ match-fn*
-          [(('an G D) left)
-            (def hsG (add-locals G left))
-            (def hsD (add-locals D #f))
-            @ fn (f hs)
+        @ if (undef? G) hs1 --目标没有前件的情况下hs不需要添加假设
+        @ letrec ([add-locals @ match-fn* --(add-locals G left)处理目标前件G，并生成对应假设。G是目标前件，left是使用处理的G是在/\的左边(#t)还是右边(#f)。它返回一个函数，这个函数接收两个参数f,hs，其中f是一个处理每个生成假设的函数，接受(变量v，公式a，证明p)，hs是现有的假设列表，这个函数的作用结果是新的假设列表。
+          [(('an G D) left) --如果是G /\ D
+            (def hsG (add-locals G left)) --hsG为左迭代
+            (def hsD (add-locals D #f)) --hsD为右迭代，D一定在右边（注意这里的an是左结合）
+            @ fn (f hs) --返回一个函数，接受一个函数f和假设列表hs
             @ hsG (fn (v a p) (f v a '(anwl ,G ,D ,a ,p)))
             @ hsD (fn (v a p) (f v a '(anwr ,G ,D ,a ,p))) hs]
-          [((or 'G '_G) #t) @ fn (f hs) (append hs1 hs)]
-          [(a _)
-            (def v @ match vs
-              [(v . vs2) (set! vs vs2) v]
-              [_
-                (def n @ if (number? vs) vs 0)
-                (set! vs {n + 1})
-                (atom-app "_h" n)])
+          [((or 'G '_G) #t) @ fn (f hs) (append hs1 hs)] --如果遇到G，返回hs1和hs的拼接
+          [(a _) --如果是原子
+            (def v @ match vs 
+              [(v . vs2) (set! vs vs2) v] --将v定义为vs的第一个并将vs重新定义为vs除去第一个后的值
+              [_ --如果vs为空
+                (def n @ if (number? vs) vs 0) --开始计数，如果vs能被计数就从vs开始，否则从0开始
+                (set! vs {n + 1}) --将vs++
+                (atom-app "_h" n)]) --返回一个新的原子变量名
             @ fn (f hs) '(,(f v a '(id ,a)) . ,hs)]])
-        ((add-locals G #t) (fn (v a p) '(,v (,a ,p))) ()))
+        ((add-locals G #t) (fn (v a p) '(,v (,a ,p))) ())) 
       (list G (apply atom-map! hs) (rev @ map hd hs) rhs g))
     (set-close-fn folmode-end)
     (folrefine r))
@@ -1424,59 +1426,62 @@ do {
   --| * `(:base p)` provides `p` as an MM0 refine script.
   --| * `(p p1 ... pn)` proves `b` if `p: a1 -> a2 -> ... -> an -> b` and `pi: ai`.
   (def (folrefine . rs)
-    (def newgs (ref! ()))
-    (def (push . a) @ set! newgs @ cons a @ get! newgs)
-    (def (im2 G e) @ if (def? G) '(im ,G ,e) e)
-    @ letrec ([((folref G hm hs p) refine tgt)
-      (def (im e) (im2 G e))
-      (def rhs (match tgt [('im _ e) e] [_ tgt]))
-      (def (app sp p ps)
-        @ match (lookup hm p)
-          [(t pr)
-            (def mp (if (def? G) 'mpd 'ax_mp))
+    (def newgs (ref! ())) --新建一个存目标的列表
+    (def (push . a) @ set! newgs @ cons a @ get! newgs) --(push a1 a2 ··· an)：将(a1,a2,···,an)存入newgs。
+    (def (im2 G e) @ if (def? G) '(im ,G ,e) e) --(im2 G e)：如果G被定义则返回'(im G e)，否则返回e
+    @ letrec ([((folref G hm hs p) refine tgt) --folref是tactic，G是上下文前提条件，hm是假设映射（格式为(h (R pr))，其中h是假设名称，R是假设内容，pr是R或者G -> R的证明，也就是与上下文的关联），hs是上下文变量名列表，p是当前处理的证明
+      (def (im e) (im2 G e)) --如果G被定义则返回'(im G e)，否则返回e
+      (def rhs (match tgt [('im _ e) e] [_ tgt])) --tgt的后件
+      (def (app sp p ps) --将假设p，参数ps应用于sp。
+        @ match (lookup hm p) --寻找假设映射中有没有p
+          [(t pr) --t是假设内容，pr是t或G -> t的证明
+            (def mp (if (def? G) 'mpd 'ax_mp)) --mpd是有假设G的情况下的ax_mp
             @ copy-span sp @ foldl ps
-              (copy-span p '{(:verb ,pr) : (:verb ,(im t))})
-              (fn (acc p2) (list mp acc (folref G hm hs p2)))]
-          [#undef (error-at p "unimplemented") (copy-span p '?)])
-      (def out @ match p
-        [('ian p1 . ps)
-          (def ian (if (def? G) 'iand 'ian))
+              (copy-span p '{(:verb ,pr) : (:verb ,(im t))}) --pr的证明，pr（t或G -> t）和(im t)（t或G -> t）是同一个式子。
+              (fn (acc p2) (list mp acc (folref G hm hs p2)))] --反复应用mp得到结论(如果p是$G->a->b->c$，ps是$G->a$,$G->b$，则得到$G->c$，注意这里假设的参数也要refine)
+          [#undef (error-at p "unimplemented") (copy-span p '?)]) --假设映射中没有p则报错
+      (def out @ match p --输出函数，先对当前证明表达式进行分类
+        [('ian p1 . ps) --ian模式(合取合并)
+          (def ian (if (def? G) 'iand 'ian)) --如果有G,则ian是G -> a > G -> b > G -> a /\ b ，如果没有G，则是a > b > a -> b
           @ foldl ps (folref G hm hs p1) @ fn (acc p2)
-          @ copy-span p (list ian acc (folref G hm hs p2))]
-        [('iim . ps)
-          @ letrec ([(iim G hm hs ps rhs) @ match ps
-            [(p) (folref G hm hs p)]
-            [(x . ps2)
+          @ copy-span p (list ian acc (folref G hm hs p2))] --生成a1 /\ a2 /\ ··· /\ an的证明
+        [('iim . ps) --iim模式（假设引入）
+          @ letrec ([(iim G hm hs ps rhs) @ match ps --G是上下文，hm是假设映射，（格式为(h (R pr))，其中h是假设名称，R是假设内容，pr是R或者G -> R的证明），hs是上下文变量名列表，ps是iim参数列表，rhs是目前证明表达式。
+            [(p) (folref G hm hs p)] --如果ps只有一个参数，则继续调用folref
+            [(x . ps2) --如果ps有多个参数
               @ match (match rhs
-                [('im D rhs2) (list D rhs2)]
-                [_ (list (copy-span x (mvar! 'wff #f)) (mvar! 'wff #f))])
-                @ (D rhs2)
-              (def G2 @ if (def? G) '(an ,G ,D) D)
+                [('im D rhs2) (list D rhs2)] --如果rhs也是一个蕴涵式，则D为rhs的前件，rhs2为rhs的后件，返回
+                [_ (list (copy-span x (mvar! 'wff #f)) (mvar! 'wff #f))]) --如果目标式的后件不是一个蕴涵式，则返回在x位置创建的一个wff元变量和一个新的wff元变量
+                @ (D rhs2) --匹配上面返回的内容
+              --更新上下文
+              (def G2 @ if (def? G) '(an ,G ,D) D) --如果上下文G被定义，则G2是G /\ D，否则G2是D。G2是新的上下文。
+              --更新假设映射
               (def hm2 @ apply atom-map! @ rmap (rev hs) @ if (def? G)
-                (fn (h) @ match (lookup hm h) [(R pr) '(,h (,R (anwl ,G ,D ,R ,pr)))])
-                (fn (h) @ match (lookup hm h) [(R pr) '(,h (,R (a1i ,D ,R ,pr)))]))
+                (fn (h) @ match (lookup hm h) [(R pr) '(,h (,R (anwl ,G ,D ,R ,pr)))]) --更新假设证明，原本的pr是G -> R的证明，现在(anwl ,G ,D ,R ,pr)得到的是G /\ D -> R的证明。
+                (fn (h) @ match (lookup hm h) [(R pr) '(,h (,R (a1i ,D ,R ,pr)))])) --更新假设证明，原本的pr是R的证明，现在(a1i ,D ,R ,pr)得到的是D -> R的证明。
+              --更新假设列表
               (def hs2 @ match x ['_ hs] @ _
                 (insert! hm2 x @ list D @ if (def? G) '(anr ,G ,D) '(id ,D))
-                (cons x hs))
-              '{(exp ,(iim G2 hm2 hs2 ps2 rhs2)) : ,(im2 G '(im ,D ,rhs2))}]
-            [_ (error-at p "expected > 1 argument") (copy-span p '?)]])
-          (iim G hm hs ps rhs)]
-        [(or '_ ('_))
-          (def g (goal! p tgt))
-          (push G hm hs rhs g)
-          '(:verb ,g)]
-        [(? atom?) (app p p ())]
-        [(':base p) p]
-        [((? atom? p1) . ps) (app p p1 ps)])
+                (cons x hs)) --加入新的假设，如果G被定义就用anr证明得到G /\ D -> D，如果G未被定义就用id得到D -> D的证明。
+              '{(exp ,(iim G2 hm2 hs2 ps2 rhs2)) : ,(im2 G '(im ,D ,rhs2))}] --(exp $ G /\ D -> ··· $)和(G -> D -> ···)是一样的，{a : b}表示同一表达式a和b
+            [_ (error-at p "expected > 1 argument") (copy-span p '?)]]) --iim调用至少要有一个参数
+          (iim G hm hs ps rhs)] --调用我们之前用letrec定义的iim函数
+        [(or '_ ('_)) --如果是_，则创建新的目标
+          (def g (goal! p tgt)) --在位置p创建一个tgt目标
+          (push G hm hs rhs g) --存入目标，G是上下文，hm是假设映射，hs是假设列表，rhs是tgt的后件，g是目标。
+          '(:verb ,g)] --返回目标g
+        [(? atom?) (app p p ())]--如果是个原子（没有参数的假设），则
+        [(':base p) p] --返回证明p
+        [((? atom? p1) . ps) (app p p1 ps)]) --如果是一原子带参数（有参数的假设），则将假设p1，参数ps应用于p。
       (refine tgt out)])
-    (def oldgs (ref! @ get! folmode-context))
-    (apply refine @ rmap rs @ match-fn
+    (def oldgs (ref! @ get! folmode-context)) --旧的上下文
+    (apply refine @ rmap rs @ match-fn --将rs逐个与首个目标匹配
       [#undef]
       [e @ match oldgs
-        [((G hm hs _ _) . gs) (set! oldgs gs) (folref G hm hs e)]
-        [_ (error "no more goals")]])
-    (set! folmode-context @ append (rev newgs) oldgs)
-    (folmode-reset-goals))
+        [((G hm hs _ _) . gs) (set! oldgs gs) (folref G hm hs e)]--与首个目标匹配成功，则oldgs去掉该目标，并将e执行folrefine后再refine
+        [_ (error "no more goals")]]) --没有目标就报错
+    (set! folmode-context @ append (rev newgs) oldgs) --将新目标接上
+    (folmode-reset-goals)) --重置目标
 };
 
 --| The sort of sets of natural numbers. Because we are working in

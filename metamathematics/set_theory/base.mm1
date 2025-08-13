@@ -1,4 +1,4 @@
-import "D:/BaiduSyncdisk/Math/metamathematics/set_theory/tactic.mm1";
+import "tactic.mm1";
 
 --|分隔符
 delimiter $ ( [ { $ $ } ] ) $;
@@ -104,6 +104,7 @@ axiom ax_f3: $ A \imp \fo x A $;
 --等式公理
 --|E1公理
 axiom ax_e1: $ \fo x (x \eq x) $;
+
 --|E2公理
 axiom ax_e2: $ \fo x \fo y (x \eq y \imp y \eq x) $;
 --|E3公理

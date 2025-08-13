@@ -1,11 +1,11 @@
-import "D:/BaiduSyncdisk/Math/metamathematics/set_theory/base.mm1";
+import "base.mm1";
 
 --命题逻辑(蕴涵)--
 --|MP规则
 theorem mp (h1: $ A \imp B $) (h2: $ A $): $ B $ = '(! ax_mp A B h1 h2);
 do{
-  --|推广MP规则(mps thm h1 h2 ··· hn)：连续运用分离规则MP，(mps $A1 \imp A2 \imp ··· \imp An \imp B$ $A1$ $A2$ ··· $An$)可得到$B$的证明。
-  (def (mps thm . hs) (foldl hs thm (fn (a b) '(mp ,a ,b))))
+  --|推广MP(mps thm h1 h2 ··· hn)：连续运用分离规则MP，(mps $ A1 \imp A2 \imp ··· \imp An \imp B $ $ A1 $ $ A2 $ ··· $ An $)可得到$ B $的证明。
+  (def ((mps thm . ps) refine t) @ refine t @ foldl ps thm @ fn (a p) '(mp ,a ,p))
 };
 --|→左引入
 theorem ili: $ A \imp B \imp A $ = '(ax_p1);
@@ -13,41 +13,50 @@ theorem ili: $ A \imp B \imp A $ = '(ax_p1);
 theorem iils: $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ = '(ax_p2);
 --|同一律
 theorem irf: $ A \imp A $ = (focus
-    (have 's1 $ A \imp ((A \imp A) \imp A) $ 'ili)
-    (have 's2 $ (A \imp (A \imp A)) \imp (A \imp A) $ '(mp iils s1))
-    (have 's3 $ A \imp (A \imp A) $ 'ili)
-    (have 's4 $ A \imp A $ '(mp s2 s3)) 's4);
+  (step 's1 $ A \imp ((A \imp A) \imp A) $ 'ili)
+  (step 's2 $ (A \imp (A \imp A)) \imp (A \imp A) $ @ mps 'iils 's1)
+  (step 's3 $ A \imp (A \imp A) $ 'ili)
+  (step 's4 $ A \imp A $ '(mp s2 s3)) 's4);
 --|→对→左引入
 theorem iili: $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ = (focus
-    (have 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
-    (have 's2 $ (B \imp C) \imp ((A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))) $ '(mp ili s1))
-    (have 's3 $ ((B \imp C) \imp (A \imp (B \imp C))) \imp ((B \imp C) \imp ((A \imp B) \imp (A \imp C))) $ '(mp iils s2))
-    (have 's4 $ (B \imp C) \imp (A \imp (B \imp C)) $ 'ili)
-    (have 's5 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ '(mp s3 s4)) 's5);
+  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
+  (step 's2 $ (B \imp C) \imp ((A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))) $ @ mps 'ili 's1)
+  (step 's3 $ ((B \imp C) \imp (A \imp (B \imp C))) \imp ((B \imp C) \imp ((A \imp B) \imp (A \imp C))) $ @ mps 'iils 's2)
+  (step 's4 $ (B \imp C) \imp (A \imp (B \imp C)) $ 'ili)
+  (step 's5 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ @ mps 's3 's4) 's5);
 --|→对→左置换
 theorem iilp: $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ = (focus
-  (have 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
-  (have 's2 $ ((A \imp (B \imp C)) \imp (A \imp B)) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp iils s1))
-  (have 's3 $ ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B))) \imp ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ '(mp iili s2))
-  (have 's4 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B)) $ 'ili)
-  (have 's5 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp s3 s4))
-  (have 's6 $ (B \imp (A \imp B)) \imp (B \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ '(mp iili s5))
-  (have 's7 $ B \imp (A \imp B) $ 'ili)
-  (have 's8 $ B \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ '(mp s6 s7))
-  (have 's9 $ (B \imp (A \imp (B \imp C))) \imp (B \imp (A \imp C)) $ '(mp iils s8))
-  (have 's10 $ ((A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C)))) \imp ((A \imp (B \imp C)) \imp (B \imp (A \imp C))) $ '(mp iili s9))
-  (have 's11 $ (A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C))) $ 'ili)
-  (have 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ '(mp s10 s11)) 's12);
+  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
+  (step 's2 $ ((A \imp (B \imp C)) \imp (A \imp B)) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 'iils 's1)
+  (step 's3 $ ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B))) \imp ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ @ mps 'iili 's2)
+  (step 's4 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B)) $ 'ili)
+  (step 's5 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 's3 's4)
+  (step 's6 $ (B \imp (A \imp B)) \imp (B \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ @ mps 'iili 's5)
+  (step 's7 $ B \imp (A \imp B) $ 'ili)
+  (step 's8 $ B \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 's6 's7)
+  (step 's9 $ (B \imp (A \imp (B \imp C))) \imp (B \imp (A \imp C)) $ @ mps 'iils 's8)
+  (step 's10 $ ((A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C)))) \imp ((A \imp (B \imp C)) \imp (B \imp (A \imp C))) $ @ mps 'iili 's9)
+  (step 's11 $ (A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C))) $ 'ili)
+  (step 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ @ mps 's10 's11) 's12);
 --|→对→右逆引入
 theorem iirvi: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
-  (have 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
-  (have 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ '(mp iilp s1)) 's2);
---|→传递规则
-theorem itr (h1: $ A \imp B $) (h2: $ B \imp C $): $ A \imp C$ = (focus
-  (have 's1 $ A \imp B $ 'h1)
-  (have 's2 $ B \imp C $ 'h2)
-  (have 's3 $ A \imp C $ (mps 'iirvi 's1 's2)) 's3);
+  (step 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
+  (step 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ @ mps 'iilp 's1) 's2);
+--|→对→右左引入
+theorem iirli: $ (A \imp B) \imp (A \imp (C \imp B)) $ = (focus
+  (step 's1 $ B \imp (C \imp B) $ 'ili)
+  (step 's2 $ (A \imp B) \imp (A \imp (C \imp B)) $ @ mps 'iili 's1) 's2);
 do{
-  --|推广→传递规则(itrs h1 h2 ··· hn)：连续运用→传递规则，(itrs $A1 \imp A2$ $A2 \imp A3$ ··· $An-1 \imp An$)可得到$A1 \imp An$的证明。
-  (def (itrs . hs) (foldl (tl hs) (hd hs) (fn (a b) '(itr ,a ,b))))
+  --|假设列表，为一个(h1 h2 ··· hn)的列表
+  (def fol-hs (ref! ()))
+  --|假设内容，为一个h↦ht的映射
+  (def fol-hts (atom-map!))
+  --|添加假设函数(assume (h1 ht1) (h2 ht2) ···)，添加假设，hi是假设名，hti是假设内容。
+  (def (assume . hys) @ scan hys @ match-fn 
+    [((? atom? h) ht) 
+      (have h 
+        (foldr fol-hs '(imp ,ht ,ht) @ fn (a p) '(imp ,a ,p)) 
+        @ foldr fol-hs 'irf @ fn (a p) '(mp ili ,p))
+      (insert! fol-hts h ht)
+      (set! fol-hs @ append fol-hs '(,h))])
 };

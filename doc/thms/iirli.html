@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="mm0-doc">
-  <meta name="description" content="Documentation for theorem `iirvi` in `metamathematics\set_theory\logic.mm1`.">
+  <meta name="description" content="Documentation for theorem `iirli` in `metamathematics\set_theory\logic.mm1`.">
   <meta name="keywords" content="mm0, metamath-zero">
-  <title>iirvi - metamathematics\set_theory\logic.mm1 - Metamath Zero</title>
+  <title>iirli - metamathematics\set_theory\logic.mm1 - Metamath Zero</title>
   <link rel="stylesheet" type="text/css" href="../stylesheet.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen">
@@ -16,32 +16,32 @@
 <body>
   <div class="body">
     <h1 class="title">
-      Theorem <a class="thm" href="">iirvi</a>
-      <span class="nav"><a href="iilp.html" title="iilp">&#8810;</a> | <a href="../index.html#iirvi">index</a> | <a href="https://github.com/BrassWrench/Math/tree/main/metamathematics/set_theory/logic.mm1#L1">src</a> | <a href="iirli.html" title="iirli">&#8811;</a></span>
+      Theorem <a class="thm" href="">iirli</a>
+      <span class="nav"><a href="iirvi.html" title="iirvi">&#8810;</a> | <a href="../index.html#iirli">index</a> | <a href="https://github.com/BrassWrench/Math/tree/main/metamathematics/set_theory/logic.mm1#L1">src</a></span>
     </h1>
-      <div class="doc"><p>→对→右逆引入</p>
+      <div class="doc"><p>→对→右左引入</p>
 </div>
-    <pre>theorem iirvi (A B C: wff): $ (A \imp B) \imp (B \imp C) \imp A \imp C $;</pre>
+    <pre>theorem iirli (A B C: wff): $ (A \imp B) \imp A \imp C \imp B $;</pre>
     <table class="proof">
       <tbody>
         <tr class="proof-head"><th>Step</th><th>Hyp</th><th>Ref</th><th>Expression</th></tr>
         <tr id="1" class="step-thm">
           <td>1</td>
           <td></td>
-          <td><a class="thm" href="iilp.html">iilp</a></td>
-          <td><pre>((B \imp C) \imp (A \imp B) \imp A \imp C) \imp (A \imp B) \imp (B \imp C) \imp A \imp C</pre></td>
+          <td><a class="thm" href="iili.html">iili</a></td>
+          <td><pre>(B \imp C \imp B) \imp (A \imp B) \imp A \imp C \imp B</pre></td>
         </tr>
         <tr id="2" class="step-thm">
           <td>2</td>
           <td></td>
-          <td><a class="thm" href="iili.html">iili</a></td>
-          <td><pre>(B \imp C) \imp (A \imp B) \imp A \imp C</pre></td>
+          <td><a class="thm" href="ili.html">ili</a></td>
+          <td><pre>B \imp C \imp B</pre></td>
         </tr>
         <tr id="3" class="step-thm">
           <td>3</td>
           <td><a href="#1">1</a>, <a href="#2">2</a></td>
           <td><a class="thm" href="mp.html">mp</a></td>
-          <td><pre>(A \imp B) \imp (B \imp C) \imp A \imp C</pre></td>
+          <td><pre>(A \imp B) \imp A \imp C \imp B</pre></td>
         </tr>
       </tbody>
     </table>

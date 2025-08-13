@@ -24,7 +24,7 @@ do{
     [() ()])
     --|连接函数(append . ls)：接受任意数量的列表参数，将这些列表连接起来并返回。
     (def (append . ls) @ foldr ls () @ fn (l l2) @ foldr l l2 cons)
-    --|倒置函数(rev l)：l是一个列表，返回l的倒置（将l的左右反过来）。
+    --|翻转函数(rev l)：l是一个列表，返回l的翻转（将l的左右反过来）。
     (def (rev l) @ foldl l () (fn (l a) (cons a l)))
     --|长度函数(len l)：l是一个列表，返回l的长度（项的个数）。
     (def (len l) @ foldl l 0 (fn (n _) {n + 1}))
@@ -34,6 +34,8 @@ do{
     (def (repeat a n) (if {n = 0} () (cons a (repeat a {n - 1}))))
     --|迭代函数(iterate n f a)：返回(f (f ··· (f a)))，其中f被执行n次。
     (def (iterate n f a) (if {n = 0} a (f (iterate {n - 1} f a))))
+    --|判断列表是否为空函数(empty l)：如果l是个空列表()则返回#t，否则返回#f。
+    (def empty? @ match-fn ['() #t] [_ #f])
     --|查询生成函数(find l)：l是一个映射（形如((k1 v1) (k2 v2) ··· (kn vn))的列表），返回一个函数，该函数接收一个参数k，寻找l中k对应的v，找不到则返回#undef。
     (def (find l) @ match l
     [((k v) . l) (def f (find l)) @ fn (a) @ if {k == a} v (f a)]
@@ -57,7 +59,7 @@ do{
     (def (report a) (def g (result)) (refine a) (print g))
     --|原子映射创建函数(atom-map (k1 v1) (k2 v2) ··· (kn vn))：创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。
     (def (atom-map . xs) (get! @ apply atom-map! xs))
-    --|原子查询生成函数(lookup-fn xs)：xs是一个创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。
+    --|原子查询生成函数(lookup-fn xs)：xs是一个创建一个内容为((k1 v1) (k2 v2) ··· (kn vn))的映射，其中k1,k2,···,kn必须是原子项。返回该映射的查询函数。
     (def (lookup-fn xs) (def m (apply atom-map xs)) (fn k (apply lookup m k)))
     --|原子名连接函数(atom-app x1 x2 ··· xn)：x1,x2,···,xn都是原子项。函数返回一个以将x1,x2,···,xn的名字连接起来为名字的原子项
     (def (atom-app . xs) (string->atom (apply string-append (map ->string xs))))
@@ -87,12 +89,15 @@ do{
     (def suffices @ match-fn*
     [(h) (have h _) (swap)]
     [xs (apply have xs) (swap)])
+    --|步骤策略(step h e p)或(step h p)，创造一个子步骤，名称为h，证明为p，如果有参数e则e用于与证明p对齐。
+    (def (step . args) @ apply have args)
     --|获取证明函数(get-proof x)：x是一个定理，返回x的证明。
     (def (get-proof x) @ match (get-decl x)
     [('theorem _ _ _ _ _ pf) (hd @ tl @ pf)]
     [_ (error "not a theorem")])
     --|打印证明函数(pp-proof x)：x是一个定理，打印x的证明。
     (def (pp-proof x) (display @ pp @ get-proof x))
+
 
     --|公理组
     (def axiom-sets (atom-map!))
