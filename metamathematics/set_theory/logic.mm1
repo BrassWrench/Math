@@ -157,6 +157,17 @@ do{
     (set! global-shs (atom-map!))
     (hd args))
 };
+--|→对→左提取
+theorem iilx: $ ((A \imp B) \imp (A \imp C)) \imp (A \imp (B \imp C)) $ = (focus
+  (assu 's1 $ (A \imp B) \imp (A \imp C) $)
+  (assu 's2 $ A $)
+  (assu 's3 $ B $)
+  (step 's4 $ A \imp B $ @ mps 'ili 's3)
+  (step 's5 $ A \imp C $ @ mps 's1 's4)
+  (step 's6 $ C $ @ mps 's5 's2)
+  (deas 's7 $ B \imp C $ @ deas-imp 's3 's6)
+  (deas 's8 $ A \imp (B \imp C) $ @ deas-imp 's2 's7)
+  (endd 's9 $ ((A \imp B) \imp (A \imp C)) \imp (A \imp (B \imp C)) $ @ deas-imp 's1 's8));
 --|→对→右插入
 theorem iirt: $ ((A \imp B) \imp C) \imp ((A \imp C) \imp (B \imp C)) $ = (focus
   (assu 's1 $ (A \imp B) \imp C $)
