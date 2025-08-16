@@ -64,7 +64,7 @@
       <div class="doc"><p>等于谓词x=y</p>
 </div>
       <pre><span class="kw">term</span> <a class="term" href="index.html#eq">eq</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a>;
-<span class="kw">infixr</span> <a class="term" href="index.html#eq">eq</a>: $<a class="term" href="index.html#eq">\eq</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
+<span class="kw">infixr</span> <a class="term" href="index.html#eq">eq</a>: $<a class="term" href="index.html#eq">=</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
     <div id="in">
       <div class="doc"><p>属于谓词x∈y</p>
@@ -81,7 +81,7 @@
     <div id="neq">
       <div class="doc"><p>不等于谓词x/=y</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#neq">neq</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x \eq y $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#neq">neq</a> (x y: <a class="sortname" href="index.html#set">set</a>): <a class="sortname" href="index.html#wff">wff</a> = $ \neg x = y $;
 <span class="kw">infixr</span> <a class="def" href="index.html#neq">neq</a>: $<a class="def" href="index.html#neq">\neq</a>$ <span class="kw">prec</span> <span class="prec">60</span>;</pre>
     </div>
     <div id="nin">
@@ -117,7 +117,7 @@
     <div id="exu">
       <div class="doc"><p>存在唯一量词∃!x</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#exu">exu</a> {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \ex y \fo x (x \eq y \iff P) $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#exu">exu</a> {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \ex y \fo x (x = y \iff P) $;
 <span class="kw">prefix</span> <a class="def" href="index.html#exu">exu</a>: $<a class="def" href="index.html#exu">\exu</a>$ <span class="kw">prec</span> <span class="prec">50</span>;</pre>
     </div>
     <div id="foin">
@@ -147,7 +147,7 @@
     <div id="t">
       <div class="doc"><p>真值⊤</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#t">t</a>: <a class="sortname" href="index.html#wff">wff</a> = $ \fo x x \eq x \imp \fo x x \eq x $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#t">t</a>: <a class="sortname" href="index.html#wff">wff</a> = $ \fo x x = x \imp \fo x x = x $;
 <span class="kw">prefix</span> <a class="def" href="index.html#t">t</a>: $<a class="def" href="index.html#t">\t</a>$ <span class="kw">prec</span> <span class="prec">50</span>;</pre>
     </div>
     <div id="f">
@@ -159,7 +159,7 @@
     <div id="rep">
       <div class="doc"><p>替换[y/x]</p>
 </div>
-      <pre><span class="kw">def</span> <a class="def" href="index.html#rep">rep</a> (y: <a class="sortname" href="index.html#set">set</a>) {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \fo t (t \eq y \imp \fo x (x \eq t \imp P)) $;
+      <pre><span class="kw">def</span> <a class="def" href="index.html#rep">rep</a> (y: <a class="sortname" href="index.html#set">set</a>) {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = $ \fo t (t = y \imp \fo x (x = t \imp P)) $;
 <span class="kw">notation</span> <a class="def" href="index.html#rep">rep</a> (y: <a class="sortname" href="index.html#set">set</a>) {x: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x): <a class="sortname" href="index.html#wff">wff</a> = ($\rep{$:<span class="prec">50</span>) y ($}{$:<span class="prec">0</span>) x ($}$:<span class="prec">0</span>) P;</pre>
     </div>
     <div id="ax_mp">
@@ -200,27 +200,27 @@
     <div id="ax_e1">
       <div class="doc"><p>E1公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e1.html">ax_e1</a> {x: <a class="sortname" href="index.html#set">set</a>}: $ \fo x x \eq x $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e1.html">ax_e1</a> {x: <a class="sortname" href="index.html#set">set</a>}: $ \fo x x = x $;</pre>
     </div>
     <div id="ax_e2">
       <div class="doc"><p>E2公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e2.html">ax_e2</a> {x y: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y (x \eq y \imp y \eq x) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e2.html">ax_e2</a> {x y: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y (x = y \imp y = x) $;</pre>
     </div>
     <div id="ax_e3">
       <div class="doc"><p>E3公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e3.html">ax_e3</a> {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y \fo z (x \eq y \and y \eq z \imp x \eq z) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e3.html">ax_e3</a> {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y \fo z (x = y \and y = z \imp x = z) $;</pre>
     </div>
     <div id="ax_e4">
       <div class="doc"><p>E4公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e4.html">ax_e4</a> {x y: <a class="sortname" href="index.html#set">set</a>} (P Q: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_e4.html">ax_e4</a> {x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo x \fo y (x = y \imp (P \iff \rep{y}{x} P)) $;</pre>
     </div>
     <div id="ax_ext">
       <div class="doc"><p>外延公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_ext.html">ax_ext</a> {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y (x \eq y \iff \fo z (z \in x \iff z \in y)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_ext.html">ax_ext</a> {x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y (x = y \iff \fo z (z \in x \iff z \in y)) $;</pre>
     </div>
     <div id="ax_emp">
       <div class="doc"><p>空集公理</p>
@@ -240,7 +240,7 @@
     <div id="ax_pai">
       <div class="doc"><p>配对公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_pai.html">ax_pai</a> {u x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y \ex u \fo z (z \in u \iff z \eq x \or z \eq y) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_pai.html">ax_pai</a> {u x y z: <a class="sortname" href="index.html#set">set</a>}: $ \fo x \fo y \ex u \fo z (z \in u \iff z = x \or z = y) $;</pre>
     </div>
     <div id="ax_uni">
       <div class="doc"><p>并集公理</p>
@@ -255,7 +255,7 @@
     <div id="ax_rep">
       <div class="doc"><p>替换公理</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_rep.html">ax_rep</a> {u v x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;</pre>
+      <pre><span class="vis"></span><span class="kw">axiom</span> <a class="ax" href="thms/ax_rep.html">ax_rep</a> {u v x y: <a class="sortname" href="index.html#set">set</a>} (P: <a class="sortname" href="index.html#wff">wff</a> x y): $ \fo u (\fo x \ex y \fo v (P \imp y = v) \imp \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;</pre>
     </div>
     <div id="ax_reg">
       <div class="doc"><p>正则公理</p>
@@ -277,10 +277,10 @@
 </div>
       <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/ili.html">ili</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ A \imp B \imp A $;</pre>
     </div>
-    <div id="iils">
+    <div id="iilt">
       <div class="doc"><p>→对→左插入</p>
 </div>
-      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iils.html">iils</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $;</pre>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iilt.html">iilt</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $;</pre>
     </div>
     <div id="irf">
       <div class="doc"><p>同一律</p>
@@ -302,10 +302,30 @@
 </div>
       <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iirvi.html">iirvi</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B) \imp (B \imp C) \imp A \imp C $;</pre>
     </div>
+    <div id="itrk">
+      <div class="doc"><p>→传递（柯里化形式）</p>
+</div>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/itrk.html">itrk</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B) \imp (B \imp C) \imp A \imp C $;</pre>
+    </div>
     <div id="iirli">
       <div class="doc"><p>→对→右左引入</p>
 </div>
       <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iirli.html">iirli</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B) \imp A \imp C \imp B $;</pre>
+    </div>
+    <div id="mpek">
+      <div class="doc"><p>MP（柯里化形式）</p>
+</div>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/mpek.html">mpek</a> (A B: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B) \imp A \imp B $;</pre>
+    </div>
+    <div id="mpili">
+      <div class="doc"><p>MP假设引入</p>
+</div>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/mpili.html">mpili</a> (A B C D: <a class="sortname" href="index.html#wff">wff</a>): $ (A \imp B \imp C) \imp (D \imp A) \imp (D \imp B) \imp D \imp C $;</pre>
+    </div>
+    <div id="iirt">
+      <div class="doc"><p>→对→右插入</p>
+</div>
+      <pre><span class="vis"></span><span class="kw">theorem</span> <a class="thm" href="thms/iirt.html">iirt</a> (A B C: <a class="sortname" href="index.html#wff">wff</a>): $ ((A \imp B) \imp C) \imp (A \imp C) \imp B \imp C $;</pre>
     </div>
   </div>
 </body>

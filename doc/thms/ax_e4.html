@@ -21,9 +21,8 @@
     </h1>
       <div class="doc"><p>E4公理</p>
 </div>
-    <pre>axiom ax_e4 {x y: set} (P Q: wff x y):
-  $ \fo x \fo y (x \eq y \and (\rep{y}{x} P \iff \rep{y}{x} Q) \imp (P \iff Q)
-  ) $;</pre>
+    <pre>axiom ax_e4 {x y: set} (P: wff x y):
+  $ \fo x \fo y (x = y \imp (P \iff \rep{y}{x} P)) $;</pre>
   </div>
 </body>
 </html>

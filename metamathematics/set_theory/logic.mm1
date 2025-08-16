@@ -5,58 +5,165 @@ import "base.mm1";
 theorem mp (h1: $ A \imp B $) (h2: $ A $): $ B $ = '(! ax_mp A B h1 h2);
 do{
   --|推广MP(mps thm h1 h2 ··· hn)：连续运用分离规则MP，(mps $ A1 \imp A2 \imp ··· \imp An \imp B $ $ A1 $ $ A2 $ ··· $ An $)可得到$ B $的证明。
-  (def ((mps thm . ps) refine t) @ refine t @ foldl ps thm @ fn (a p) '(mp ,a ,p))
+  (def (mps thm . ps) @ foldl ps thm @ fn (a p) '(mp ,a ,p))
+  --|步骤策略(step h e p)或(step h p)，创造一个子步骤，名称为h，证明为p，如果有参数e则e用于与证明p对齐。
+  (def (step . args) @ apply have args)
+  --|最后步骤策略(step h e p)或(step h p)，创造一个子步骤，名称为h，证明为p，如果有参数e则e用于与证明p对齐。返回h作为证明命题的最后一个步骤。
+  (def (ends . args) (apply step args) @ hd args)
 };
 --|→左引入
 theorem ili: $ A \imp B \imp A $ = '(ax_p1);
 --|→对→左插入
-theorem iils: $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ = '(ax_p2);
+theorem iilt: $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ = '(ax_p2);
 --|同一律
 theorem irf: $ A \imp A $ = (focus
   (step 's1 $ A \imp ((A \imp A) \imp A) $ 'ili)
-  (step 's2 $ (A \imp (A \imp A)) \imp (A \imp A) $ @ mps 'iils 's1)
+  (step 's2 $ (A \imp (A \imp A)) \imp (A \imp A) $ @ mps 'iilt 's1)
   (step 's3 $ A \imp (A \imp A) $ 'ili)
-  (step 's4 $ A \imp A $ '(mp s2 s3)) 's4);
+  (ends 's4 $ A \imp A $ @ mps 's2 's3));
 --|→对→左引入
 theorem iili: $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ = (focus
-  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
+  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iilt)
   (step 's2 $ (B \imp C) \imp ((A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C))) $ @ mps 'ili 's1)
-  (step 's3 $ ((B \imp C) \imp (A \imp (B \imp C))) \imp ((B \imp C) \imp ((A \imp B) \imp (A \imp C))) $ @ mps 'iils 's2)
+  (step 's3 $ ((B \imp C) \imp (A \imp (B \imp C))) \imp ((B \imp C) \imp ((A \imp B) \imp (A \imp C))) $ @ mps 'iilt 's2)
   (step 's4 $ (B \imp C) \imp (A \imp (B \imp C)) $ 'ili)
-  (step 's5 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ @ mps 's3 's4) 's5);
+  (ends 's5 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ @ mps 's3 's4));
 --|→对→左置换
 theorem iilp: $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ = (focus
-  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iils)
-  (step 's2 $ ((A \imp (B \imp C)) \imp (A \imp B)) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 'iils 's1)
+  (step 's1 $ (A \imp (B \imp C)) \imp ((A \imp B) \imp (A \imp C)) $ 'iilt)
+  (step 's2 $ ((A \imp (B \imp C)) \imp (A \imp B)) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 'iilt 's1)
   (step 's3 $ ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B))) \imp ((A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ @ mps 'iili 's2)
   (step 's4 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp B)) $ 'ili)
   (step 's5 $ (A \imp B) \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 's3 's4)
   (step 's6 $ (B \imp (A \imp B)) \imp (B \imp ((A \imp (B \imp C)) \imp (A \imp C))) $ @ mps 'iili 's5)
   (step 's7 $ B \imp (A \imp B) $ 'ili)
   (step 's8 $ B \imp ((A \imp (B \imp C)) \imp (A \imp C)) $ @ mps 's6 's7)
-  (step 's9 $ (B \imp (A \imp (B \imp C))) \imp (B \imp (A \imp C)) $ @ mps 'iils 's8)
+  (step 's9 $ (B \imp (A \imp (B \imp C))) \imp (B \imp (A \imp C)) $ @ mps 'iilt 's8)
   (step 's10 $ ((A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C)))) \imp ((A \imp (B \imp C)) \imp (B \imp (A \imp C))) $ @ mps 'iili 's9)
   (step 's11 $ (A \imp (B \imp C)) \imp (B \imp (A \imp (B \imp C))) $ 'ili)
-  (step 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ @ mps 's10 's11) 's12);
+  (ends 's12 $ (A \imp (B \imp C)) \imp (B \imp (A \imp C)) $ @ mps 's10 's11));
 --|→对→右逆引入
 theorem iirvi: $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ = (focus
   (step 's1 $ (B \imp C) \imp ((A \imp B) \imp (A \imp C)) $ 'iili)
-  (step 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ @ mps 'iilp 's1) 's2);
+  (ends 's2 $ (A \imp B) \imp ((B \imp C) \imp (A \imp C)) $ @ mps 'iilp 's1));
+--|→传递（柯里化形式）
+theorem itrk: $ (A \imp B) \imp (B \imp C) \imp (A \imp C) $ = (focus
+  (ends 's1 $ (A \imp B) \imp (B \imp C) \imp (A \imp C) $ 'iirvi));
+do{
+  --|推广→传递（柯里化形式）(itrks h1 h2 ··· hn)：(itrks $ A1 \imp A2 $ $ A2 \imp A3 $ ··· $ An-1 \imp An $)可得到$ A1 \imp An $的证明。
+  (def (itrks . ps) @ foldl (tl ps) (hd ps) @ fn (a p) (mps 'itrk a p))
+};
 --|→对→右左引入
 theorem iirli: $ (A \imp B) \imp (A \imp (C \imp B)) $ = (focus
   (step 's1 $ B \imp (C \imp B) $ 'ili)
-  (step 's2 $ (A \imp B) \imp (A \imp (C \imp B)) $ @ mps 'iili 's1) 's2);
+  (ends 's2 $ (A \imp B) \imp (A \imp (C \imp B)) $ @ mps 'iili 's1));
+--|MP（柯里化形式）
+theorem mpek: $ (A \imp B) \imp A \imp B $ = (focus
+  (ends 's1 $ (A \imp B) \imp A \imp B $ 'irf));
+--|MP假设引入
+theorem mpili: $ (A \imp B \imp C) \imp ((D \imp A) \imp (D \imp B) \imp (D \imp C)) $ = (focus
+  (step 's1 $ (A \imp B \imp C) \imp ((D \imp A) \imp (D \imp (B \imp C))) $ 'iili)
+  (step 's2 $ (D \imp (B \imp C)) \imp ((D \imp B) \imp (D \imp C)) $ 'iilt)
+  (step 's3 $ ((D \imp A) \imp (D \imp (B \imp C))) \imp ((D \imp A) \imp ((D \imp B) \imp (D \imp C))) $ @ mps 'iili 's2)
+  (ends 's4 $ (A \imp B \imp C) \imp ((D \imp A) \imp (D \imp B) \imp (D \imp C)) $ @ itrks 's1 's3));
+
+--|演绎定理，引入假设和移出假设实现
 do{
   --|假设列表，为一个(h1 h2 ··· hn)的列表
-  (def fol-hs (ref! ()))
+  (def global-hs (ref! ()))
   --|假设内容，为一个h↦ht的映射
-  (def fol-hts (atom-map!))
-  --|添加假设函数(assume (h1 ht1) (h2 ht2) ···)，添加假设，hi是假设名，hti是假设内容。
-  (def (assume . hys) @ scan hys @ match-fn 
-    [((? atom? h) ht) 
-      (have h 
-        (foldr fol-hs '(imp ,ht ,ht) @ fn (a p) '(imp ,a ,p)) 
-        @ foldr fol-hs 'irf @ fn (a p) '(mp ili ,p))
-      (insert! fol-hts h ht)
-      (set! fol-hs @ append fol-hs '(,h))])
+  (def global-hts (atom-map!))
+  --|步骤对应的假设，为一个s↦(h1 h2 ··· hs)的映射
+  (def global-shs (atom-map!))
+  --|还原公式函数(recover-e e)：将e前面的假设用\imp添加上去。
+  (def (recover-e e) @ foldr global-hs e @ fn (a p) '(imp ,(lookup global-hts a) ,p))
+  --|还原证明函数(recover-p p)：将证明当中的mp还原成原始证明以及修正过的假设。
+  (def (recover-p p)
+    (def (recover-atom p)
+      (iterate (len global-hs) p @ fn (p) '(mp ili ,p)))
+    (def (recover-mp a2b a)
+      @ if {global-hs == ()} '(mp ,a2b ,a)
+      @ begin
+        (def ghslen @ len global-hs)
+        (def (align-proof p hslen)
+          @ if {hslen = ghslen} p
+          @ if {hslen = 0} (iterate ghslen p @ fn (p) '(mp ili ,p))
+          '(mp ,(iterate hslen 
+              (iterate {ghslen - hslen} 'irf @ fn (p1) '(mp iirli ,p1)) 
+            @ fn (p2) '(mp iili ,p2)) ,p))
+        (def (find-len s) @ if (atom? s) (len @ lookup global-shs s @ fn () ()) ghslen)
+        (def a2bhslen @ find-len a2b)
+        (def ahslen @ find-len a)
+        (def newa2b @ align-proof a2b a2bhslen)
+        (def newa @ align-proof a ahslen)
+        (def newmp @ iterate ghslen 'mpek @ fn (p) '(mp mpili ,p))
+        (mps newmp newa2b newa))
+    @ letrec([(rec p) @ match p 
+    [(? atom? e) e]
+    [('mp a2b a) @ recover-mp (rec a2b) (rec a)]])
+    @ if (atom? p) (recover-atom p) @ rec p)
+  --|添加假设策略(assu (h1 ht1) (h2 ht2) ···)，添加假设，hi是假设名，hti是假设内容。
+  (def (assu . hys)
+    (def pairhys (ref! ()))
+    (for 0 (len hys) @ fn (n) 
+      @ if {{n % 2} == 0} @ set! pairhys @ append pairhys '((,(nth n hys) ,(nth {n + 1} hys))))
+    @ scan pairhys @ match-fn 
+    [((? atom? h) ht)
+      (have h (recover-e '(imp ,ht ,ht)) @ foldr global-hs 'irf @ fn (a p) '(mp ili ,p))
+      (set! global-hs @ append global-hs '(,h))
+      (insert! global-hts h ht)
+      (insert! global-shs h @ get! global-hs)
+      #undef])
+  --|步骤策略(step h p)或(step h e p)：添加步骤，名称为h，表达式为e，证明为p。自动扩展为当前上下文对应表达式，并且自动更改mp为当前上下文内容。
+  (def (step . args)
+    @ match args 
+    [((? atom? h) p)
+      (insert! global-shs h @ get! global-hs)
+      @ have h @ recover-p p]
+    [((? atom? h) e p)
+      (insert! global-shs h @ get! global-hs)
+      @ have h (recover-e e) @ recover-p p])
+  --|remove-hs策略(remove-hs h1 h2 ··· hn)：将h1,h2,···,hn移出假设列表。
+  (def (remove-hs . hs)
+    (scan hs 
+    @ fn (h) (insert! global-hts h)
+      (def newhs (ref! ()))
+      (scan global-hs @ fn (gh) @ if (not {gh == h}) @ set! newhs @ append newhs '(,gh))
+      (set! global-hs newhs)))
+  --|deas策略(deas h p)或(deas h e p)：移出假设，注意这里的证明是独立的，不用recover-p来进行恢复。
+  (def (deas . args)
+    @ match args 
+    [((? atom? h) p)
+      (insert! global-shs h @ get! global-hs)
+      @ have h p]
+    [((? atom? h) e p)
+      (insert! global-shs h @ get! global-hs)
+      @ have h (recover-e e) p])
+  --|endd策略(endd h p)或(endd h e p)：执行deas并且返回该项作为结尾证明，类似于ends。
+  (def (endd . args)
+    (apply deas args)
+    (set! global-hs (ref! ()))
+    (set! global-hts (atom-map!))
+    (set! global-shs (atom-map!))
+    (hd args))
+  --|deas-imp策略(deas h1 h2 ··· hn s)：将假设h1,h2,···,hn以imp连接的方式移入到s中，并消除，返回该式证明。
+  (def (deas-imp . args) @ match (split-last args)
+    [((? atom? s) . hs) (apply remove-hs hs) s])
+  --|最后步骤策略(ends h e p)或(ends h p)，创造一个子步骤，名称为h，证明为p，如果有参数e则e用于与证明p对齐。将global-hs、global-hts、global-shs全部清零。并且返回h作为证明命题的最后一个步骤。
+  (def (ends . args)
+    (apply step args)
+    (set! global-hs (ref! ()))
+    (set! global-hts (atom-map!))
+    (set! global-shs (atom-map!))
+    (hd args))
 };
+--|→对→右插入
+theorem iirt: $ ((A \imp B) \imp C) \imp ((A \imp C) \imp (B \imp C)) $ = (focus
+  (assu 's1 $ (A \imp B) \imp C $)
+  (assu 's2 $ A \imp C $)
+  (step 's3 $ B \imp ((A \imp B) \imp C) $ @ mps 'ili 's1)
+  (step 's4 $ (B \imp (A \imp B)) \imp (B \imp C) $ @ mps 'iilt 's3)
+  (step 's5 $ B \imp (A \imp B) $ 'ili)
+  (step 's6 $ B \imp C $ @ mps 's4 's5)
+  (deas 's7 $ (A \imp C) \imp (B \imp C) $ @ deas-imp 's2 's6)
+  (endd 's8 $ ((A \imp B) \imp C) \imp ((A \imp C) \imp (B \imp C)) $ @ deas-imp 's1 's7));

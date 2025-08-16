@@ -22,7 +22,7 @@
       <div class="doc"><p>替换公理</p>
 </div>
     <pre>axiom ax_rep {u v x y: set} (P: wff x y):
-  $ \fo u (\fo x \ex y \fo v (P \imp y \eq v) \imp
+  $ \fo u (\fo x \ex y \fo v (P \imp y = v) \imp
     \ex v \fo y (y \in v \iff \exin{x}{u} P)) $;</pre>
   </div>
 </body>

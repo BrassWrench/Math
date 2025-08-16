@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="mm0-doc">
-  <meta name="description" content="Documentation for theorem `ili` in `metamathematics\set_theory\logic.mm1`.">
+  <meta name="description" content="Documentation for theorem `iilt` in `metamathematics\set_theory\logic.mm1`.">
   <meta name="keywords" content="mm0, metamath-zero">
-  <title>ili - metamathematics\set_theory\logic.mm1 - Metamath Zero</title>
+  <title>iilt - metamathematics\set_theory\logic.mm1 - Metamath Zero</title>
   <link rel="stylesheet" type="text/css" href="../stylesheet.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen">
@@ -16,26 +16,26 @@
 <body>
   <div class="body">
     <h1 class="title">
-      Theorem <a class="thm" href="">ili</a>
-      <span class="nav"><a href="mp.html" title="mp">&#8810;</a> | <a href="../index.html#ili">index</a> | <a href="https://github.com/BrassWrench/Math/tree/main/metamathematics/set_theory/logic.mm1#L1">src</a> | <a href="iilt.html" title="iilt">&#8811;</a></span>
+      Theorem <a class="thm" href="">iilt</a>
+      <span class="nav"><a href="ili.html" title="ili">&#8810;</a> | <a href="../index.html#iilt">index</a> | <a href="https://github.com/BrassWrench/Math/tree/main/metamathematics/set_theory/logic.mm1#L1">src</a> | <a href="irf.html" title="irf">&#8811;</a></span>
     </h1>
-      <div class="doc"><p>→左引入</p>
+      <div class="doc"><p>→对→左插入</p>
 </div>
-    <pre>theorem ili (A B: wff): $ A \imp B \imp A $;</pre>
+    <pre>theorem iilt (A B C: wff): $ (A \imp B \imp C) \imp (A \imp B) \imp A \imp C $;</pre>
     <table class="proof">
       <tbody>
         <tr class="proof-head"><th>Step</th><th>Hyp</th><th>Ref</th><th>Expression</th></tr>
         <tr id="1" class="step-thm">
           <td>1</td>
           <td></td>
-          <td><a class="ax" href="ax_p1.html">ax_p1</a></td>
-          <td><pre>A \imp B \imp A</pre></td>
+          <td><a class="ax" href="ax_p2.html">ax_p2</a></td>
+          <td><pre>(A \imp B \imp C) \imp (A \imp B) \imp A \imp C</pre></td>
         </tr>
       </tbody>
     </table>
     <h2 class="axioms">Axiom use</h2>
     <span class="axs" title="ZFC公理集合论系统">ZFC</span><span class="axm">
-     (<a class="ax" href="ax_p1.html">ax_p1</a>)</span>
+     (<a class="ax" href="ax_p2.html">ax_p2</a>)</span>
   </div>
 </body>
 </html>

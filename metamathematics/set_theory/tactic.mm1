@@ -32,8 +32,8 @@ do{
     (def (filter l p) @ foldl l () @ fn (l2 x) @ if (p x) (cons x l2) l2)
     --|重复函数(repeat a n)：返回一个含有n个a的列表(a a ··· a)。
     (def (repeat a n) (if {n = 0} () (cons a (repeat a {n - 1}))))
-    --|迭代函数(iterate n f a)：返回(f (f ··· (f a)))，其中f被执行n次。
-    (def (iterate n f a) (if {n = 0} a (f (iterate {n - 1} f a))))
+    --|迭代函数(iterate n a f)：返回(f (f ··· (f a)))，其中f被执行n次。
+    (def (iterate n a f) (if {n = 0} a (f (iterate {n - 1} a f))))
     --|判断列表是否为空函数(empty l)：如果l是个空列表()则返回#t，否则返回#f。
     (def empty? @ match-fn ['() #t] [_ #f])
     --|查询生成函数(find l)：l是一个映射（形如((k1 v1) (k2 v2) ··· (kn vn))的列表），返回一个函数，该函数接收一个参数k，寻找l中k对应的v，找不到则返回#undef。
@@ -42,8 +42,6 @@ do{
     [() @ fn (a)])
     --|阻止繁饰函数(verb e)：给表达式e加上:verb标签并返回（保持错误等输出信息位置与e相同）。:verb标签用于告诉验证器不需要对其进行繁饰。
     (def (verb e) (copy-span e (list ':verb e)))
-    --|符合策略(exact e)：将定理e尝试与第一个目标匹配，如果匹配则解决该目标。
-    (def (exact e) (refine (verb e)))
     --|当前结果函数(result)：返回当前目标。
     (def (result) (hd (get-goals)))
     --|当前目标函数(target)：返回当前目标的表达式。
@@ -68,7 +66,7 @@ do{
     [(xs) (apply map list xs)]
     [(n xs) (if (null? xs) (repeat () n) (apply map list xs))])
     --|连接函数(join x1 x2 ··· xn)：将列表x1,x2,···,xn连接起来。
-    (def (join xs) (apply append xs))
+    (def (join . xs) (apply append xs))
     --|右map函数(rmap x1 x2 ··· xn f)：相当于执行(map f x1 x2 ··· xn)。
     (def (rmap . args) (apply map (split-last args)))
     --|扫描函数(scan x1 x2 ··· xn f)：执行(map f x1 x2 ··· xn)并不返回任何值（用f扫描x1,x2,···,xn）。
@@ -83,14 +81,6 @@ do{
     (def goal! @ match-fn*
     [(ty) (ref! (goal ty))]
     [(pos ty) (ref! (copy-span pos (goal ty)))])
-    --|交换策略(swap)：将当前目标移动至目标队列末尾。
-    (def (swap) @ match (get-goals) [(x . y) (apply set-goals @ append y @ list x)])
-    --|满足策略(suffices h)或(suffices h e)或(suffices h p)或(suffices h e p)：创建一个新假设h，e是h的表达式(可选)，p是h的证明(可选)，如果不提供证明则在目标队列中添加h至末尾。
-    (def suffices @ match-fn*
-    [(h) (have h _) (swap)]
-    [xs (apply have xs) (swap)])
-    --|步骤策略(step h e p)或(step h p)，创造一个子步骤，名称为h，证明为p，如果有参数e则e用于与证明p对齐。
-    (def (step . args) @ apply have args)
     --|获取证明函数(get-proof x)：x是一个定理，返回x的证明。
     (def (get-proof x) @ match (get-decl x)
     [('theorem _ _ _ _ _ pf) (hd @ tl @ pf)]
@@ -98,6 +88,14 @@ do{
     --|打印证明函数(pp-proof x)：x是一个定理，打印x的证明。
     (def (pp-proof x) (display @ pp @ get-proof x))
 
+    --|符合策略(exact e)：将定理e尝试与第一个目标匹配，如果匹配则解决该目标。
+    (def (exact e) (refine (verb e)))
+    --|交换策略(swap)：将当前目标移动至目标队列末尾。
+    (def (swap) @ match (get-goals) [(x . y) (apply set-goals @ append y @ list x)])
+    --|满足策略(suffices h)或(suffices h e)或(suffices h p)或(suffices h e p)：创建一个新假设h，e是h的表达式(可选)，p是h的证明(可选)，如果不提供证明则在目标队列中添加h至末尾。
+    (def suffices @ match-fn*
+    [(h) (have h _) (swap)]
+    [xs (apply have xs) (swap)])
 
     --|公理组
     (def axiom-sets (atom-map!))
